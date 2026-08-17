@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Keep transient search and pagination query states out of the crawl.
+Disallow: /*?q=
+Disallow: /*?search=
+Disallow: /*?page=
+
+Sitemap: https://imadtbn.github.io/Manalsc/sitemap.xml
+
+# The site has no private administration paths.

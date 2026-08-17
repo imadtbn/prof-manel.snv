@@ -242,9 +242,17 @@ function renderResources(data, page) {
     }
 
     pageData.forEach(res => {
-        const card = document.createElement('div');
+        const card = document.createElement('article');
         card.className = 'resource-card';
+        card.tabIndex = 0;
+        card.setAttribute('aria-label', `${res.title} - سنة ${res.year} - ${res.stream}`);
         card.onclick = function() { openPreview(res); };
+        card.onkeydown = function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openPreview(res);
+            }
+        };
 
         card.innerHTML = `
             <div class="card-shine"></div>
@@ -269,10 +277,10 @@ function renderResources(data, page) {
                         <span class="card-stream">${res.stream}</span>
                     </div>
                     <div class="card-actions">
-                        <button onclick="event.stopPropagation(); openPreviewById(${res.id})" class="card-btn card-btn-preview" title="معاينة">
+                        <button onclick="event.stopPropagation(); openPreviewById(${res.id})" class="card-btn card-btn-preview" title="معاينة" aria-label="معاينة ${res.title}">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <a href="${res.download}" target="_blank" onclick="event.stopPropagation()" class="card-btn card-btn-download" title="تحميل">
+                        <a href="${res.download}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="card-btn card-btn-download" title="تحميل" aria-label="تحميل ${res.title}">
                             <i class="fas fa-download"></i>
                         </a>
                     </div>
@@ -323,7 +331,13 @@ function filterResources() {
     const yearVal = document.getElementById('yearFilter')?.value || '';
     const streamVal = document.getElementById('streamFilter')?.value.toLowerCase() || '';
     const typeVal = document.getElementById('typeFilter')?.value || '';
-    const searchVal = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const searchVal = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
+
+    // Keep the shareable search state in the URL without forcing a reload.
+    const url = new URL(window.location.href);
+    if (searchVal) url.searchParams.set('q', searchVal);
+    else url.searchParams.delete('q');
+    window.history.replaceState({}, '', url);
 
     filteredResources = resources.filter(res => {
         const matchYear = !yearVal || res.year === yearVal;
@@ -699,8 +713,13 @@ document.addEventListener('DOMContentLoaded', function() {
     createHoloCells();
     initHeaderScroll();
     initSmoothScroll();
+
+    const initialQuery = new URLSearchParams(window.location.search).get('q');
+    const searchInput = document.getElementById('searchInput');
+    if (initialQuery && searchInput) searchInput.value = initialQuery;
+
+    filterResources();
     initScrollAnimations();
-    renderResources(resources, 1);
 
     console.log('%c🔬 موقع علوم الطبيعة جاهز!', 'color:#d4af37; font-size:14px; font-weight:bold;');
     console.log('%cتم تطويره بواسطة فريق علوم الطبيعة - 2026', 'color:#666; font-size:10px;');
