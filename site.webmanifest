@@ -4,14 +4,14 @@
   "description": "منصة تعليمية جزائرية لنماذج فروض واختبارات ودروس وتمارين علوم الطبيعة للثانوي.",
   "lang": "ar-DZ",
   "dir": "rtl",
-  "start_url": "/Manalsc/",
-  "scope": "/Manalsc/",
+  "start_url": "/prof-manel.snv/",
+  "scope": "/prof-manel.snv/",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
   "icons": [
     {
-      "src": "/Manalsc/assets/img/favicon.svg",
+      "src": "/prof-manel.snv/assets/img/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

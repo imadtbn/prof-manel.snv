@@ -6,6 +6,6 @@ Disallow: /*?q=
 Disallow: /*?search=
 Disallow: /*?page=
 
-Sitemap: https://imadtbn.github.io/Manalsc/sitemap.xml
+Sitemap: https://imadtbn.github.io/prof-manel.snv/sitemap.xml
 
 # The site has no private administration paths.
