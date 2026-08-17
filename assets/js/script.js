@@ -30,6 +30,61 @@ let filteredResources = [...resources];
 let currentPreviewResource = null;
 
 // ════════════════════════════════════════
+// DYNAMIC RESOURCE STATISTICS
+// ════════════════════════════════════════
+function getResourceStats(data = resources) {
+    const years = new Set(data.map(resource => resource.year).filter(Boolean));
+    const streams = new Set(data.map(resource => resource.stream).filter(Boolean));
+    const types = new Set(data.map(resource => resource.type).filter(Boolean));
+    const pages = data.reduce((total, resource) => total + (Number(resource.pages) || 0), 0);
+
+    return {
+        resources: data.length,
+        years: years.size,
+        streams: streams.size,
+        types: types.size,
+        pages
+    };
+}
+
+function formatStat(value) {
+    return new Intl.NumberFormat('ar-DZ').format(value);
+}
+
+function setStatText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = formatStat(value);
+}
+
+function updateDynamicStats() {
+    const stats = getResourceStats();
+
+    setStatText('heroYearCount', stats.years);
+    setStatText('heroStreamCount', stats.streams);
+    setStatText('heroResourceCount', stats.resources);
+    setStatText('aboutResourceCount', stats.resources);
+    setStatText('aboutTypeCount', stats.types);
+    setStatText('aboutPageCount', stats.pages);
+    setStatText('aboutStreamCount', stats.streams);
+
+    const resourceCount = document.getElementById('resourceCount');
+    if (resourceCount) resourceCount.textContent = `${formatStat(stats.resources)} مورد متاح`;
+
+    document.querySelectorAll('[data-year-card]').forEach(card => {
+        const year = card.dataset.yearCard;
+        const yearStats = getResourceStats(resources.filter(resource => resource.year === year));
+        const totalElement = card.querySelector('[data-year-total]');
+        const typesElement = card.querySelector('[data-year-types]');
+        const streamsElement = card.querySelector('[data-year-streams]');
+
+        if (totalElement) totalElement.textContent = `${formatStat(yearStats.resources)} مورد`;
+        if (typesElement) typesElement.textContent = `${formatStat(yearStats.types)} أنواع`;
+        if (streamsElement) streamsElement.textContent = `${formatStat(yearStats.streams)} شعب`;
+    });
+}
+
+
+// ════════════════════════════════════════
 // STAR FIELD CANVAS
 // ════════════════════════════════════════
 function createStarField() {
@@ -533,12 +588,12 @@ const pageContents = {
                     <h4 style="color:var(--gold);font-size:18px;font-weight:700;margin-bottom:12px;">إنجازاتنا</h4>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                         <div style="background:var(--card-bg);border-radius:12px;padding:16px;text-align:center;">
-                            <div style="font-size:24px;font-weight:700;color:var(--gold);">500+</div>
-                            <div style="color:var(--text-secondary);font-size:14px;">نموذج</div>
+                            <div id="modalResourceCount" style="font-size:24px;font-weight:700;color:var(--gold);">0</div>
+                            <div style="color:var(--text-secondary);font-size:14px;">مورد فعلي</div>
                         </div>
                         <div style="background:var(--card-bg);border-radius:12px;padding:16px;text-align:center;">
-                            <div style="font-size:24px;font-weight:700;color:var(--emerald);">50K+</div>
-                            <div style="color:var(--text-secondary);font-size:14px;">تحميل</div>
+                            <div id="modalPageCount" style="font-size:24px;font-weight:700;color:var(--emerald);">0</div>
+                            <div style="color:var(--text-secondary);font-size:14px;">صفحة تعليمية</div>
                         </div>
                     </div>
                 </div>
@@ -599,6 +654,11 @@ function openPageModal(pageKey) {
 
     if (titleEl) titleEl.textContent = page.title;
     if (contentEl) contentEl.innerHTML = page.content;
+    updateDynamicStats();
+    const modalResourceCount = document.getElementById('modalResourceCount');
+    const modalPageCount = document.getElementById('modalPageCount');
+    if (modalResourceCount) modalResourceCount.textContent = formatStat(getResourceStats().resources);
+    if (modalPageCount) modalPageCount.textContent = formatStat(getResourceStats().pages);
     if (modal) {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -713,6 +773,7 @@ document.addEventListener('DOMContentLoaded', function() {
     createHoloCells();
     initHeaderScroll();
     initSmoothScroll();
+    updateDynamicStats();
 
     const initialQuery = new URLSearchParams(window.location.search).get('q');
     const searchInput = document.getElementById('searchInput');

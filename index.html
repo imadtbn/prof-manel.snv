@@ -204,7 +204,7 @@
             <div class="hero-content">
                 <div class="badge">
                     <span class="pulse-dot"></span>
-                    <span id="resourceCount">500+ نموذج متاح</span>
+                    <span id="resourceCount">0 نموذج متاح</span>
                 </div>
 
                 <h1 id="hero-title" class="hero-title">
@@ -232,16 +232,16 @@
 
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <div class="stat-number">03</div>
+                        <div id="heroYearCount" class="stat-number">0</div>
                         <div class="stat-label">سنوات دراسية</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">03</div>
+                        <div id="heroStreamCount" class="stat-number">0</div>
                         <div class="stat-label">شعب</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">150+</div>
-                        <div class="stat-label">موضوع</div>
+                        <div id="heroResourceCount" class="stat-number">0</div>
+                        <div class="stat-label">مورد تعليمي</div>
                     </div>
                 </div>
             </div>
@@ -290,21 +290,21 @@
 
             <div class="years-grid">
                 <!-- Year 1 -->
-                <div onclick="selectYear(1)" class="year-card">
+                <div onclick="selectYear(1)" class="year-card" data-year-card="1">
                     <div class="year-label">السنة الأولى</div>
                     <div class="year-number">01</div>
                     <div class="year-stats">
                         <div class="year-stat-row">
-                            <span>ج.م.ع.ت</span>
-                            <span class="year-stat-count">25 فرض</span>
+                            <span>إجمالي الموارد</span>
+                            <span class="year-stat-count" data-year-total>0</span>
                         </div>
                         <div class="year-stat-row">
-                            <span>آداب</span>
-                            <span class="year-stat-count">19 فرض</span>
+                            <span>أنواع الموارد</span>
+                            <span class="year-stat-count" data-year-types>0</span>
                         </div>
                         <div class="year-stat-row">
-                            <span>تقني</span>
-                            <span class="year-stat-count">22 فرض</span>
+                            <span>الشعب المتاحة</span>
+                            <span class="year-stat-count" data-year-streams>0</span>
                         </div>
                     </div>
                     <div class="year-action">
@@ -314,22 +314,22 @@
                 </div>
 
                 <!-- Year 2 -->
-                <div onclick="selectYear(2)" class="year-card year-card-popular">
+                <div onclick="selectYear(2)" class="year-card year-card-popular" data-year-card="2">
                     <div class="popular-badge">الأكثر طلباً</div>
                     <div class="year-label">السنة الثانية</div>
                     <div class="year-number">02</div>
                     <div class="year-stats">
                         <div class="year-stat-row">
-                            <span>علوم تجريبية</span>
-                            <span class="year-stat-count">15 اختبار</span>
+                            <span>إجمالي الموارد</span>
+                            <span class="year-stat-count" data-year-total>0</span>
                         </div>
                         <div class="year-stat-row">
-                            <span>رياضيات</span>
-                            <span class="year-stat-count">12 فرض</span>
+                            <span>أنواع الموارد</span>
+                            <span class="year-stat-count" data-year-types>0</span>
                         </div>
                         <div class="year-stat-row">
-                            <span>تقني</span>
-                            <span class="year-stat-count">10 فرض</span>
+                            <span>الشعب المتاحة</span>
+                            <span class="year-stat-count" data-year-streams>0</span>
                         </div>
                     </div>
                     <div class="year-action">
@@ -339,17 +339,21 @@
                 </div>
 
                 <!-- Year 3 -->
-                <div onclick="selectYear(3)" class="year-card">
+                <div onclick="selectYear(3)" class="year-card" data-year-card="3">
                     <div class="year-label">السنة الثالثة</div>
                     <div class="year-number">03</div>
                     <div class="year-stats">
                         <div class="year-stat-row">
-                            <span>بكالوريا</span>
-                            <span class="year-stat-count">30 نموذج</span>
+                            <span>إجمالي الموارد</span>
+                            <span class="year-stat-count" data-year-total>0</span>
                         </div>
                         <div class="year-stat-row">
-                            <span>شعبة علوم</span>
-                            <span class="year-stat-count">تحضيري</span>
+                            <span>أنواع الموارد</span>
+                            <span class="year-stat-count" data-year-types>0</span>
+                        </div>
+                        <div class="year-stat-row">
+                            <span>الشعب المتاحة</span>
+                            <span class="year-stat-count" data-year-streams>0</span>
                         </div>
                     </div>
                     <div class="year-action">
@@ -524,19 +528,19 @@
                         </div>
                         <div class="stats-bar">
                             <div class="stats-item">
-                                <div class="stats-number">500+</div>
-                                <div class="stats-label">نموذج</div>
+                                <div id="aboutResourceCount" class="stats-number">0</div>
+                                <div class="stats-label">مورد</div>
                             </div>
                             <div class="stats-item">
-                                <div class="stats-number">50K+</div>
-                                <div class="stats-label">تحميل</div>
+                                <div id="aboutTypeCount" class="stats-number">0</div>
+                                <div class="stats-label">أنواع موارد</div>
                             </div>
                             <div class="stats-item">
-                                <div class="stats-number">3</div>
-                                <div class="stats-label">سنوات</div>
+                                <div id="aboutPageCount" class="stats-number">0</div>
+                                <div class="stats-label">صفحة تعليمية</div>
                             </div>
                             <div class="stats-item">
-                                <div class="stats-number">4</div>
+                                <div id="aboutStreamCount" class="stats-number">0</div>
                                 <div class="stats-label">شعب</div>
                             </div>
                         </div>
