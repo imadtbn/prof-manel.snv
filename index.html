@@ -26,6 +26,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+
+    <!-- Google AdSense: async لا يحجب الرسم الأولي للصفحة -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5656416032906373"
+        crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-5656416032906373">
 
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -269,16 +275,14 @@
         </div>
     </section>
 
-    <!-- Ad Slot 1 -->
-    <div class="ad-container">
-        <div class="ad-slot">
-            <div class="ad-label">إعلان</div>
-            <div class="ad-placeholder">
-                <span class="ad-desktop">📍 مكان إعلان Google AdSense (728×90)</span>
-                <span class="ad-mobile">📍 إعلان (320×50)</span>
-            </div>
+    <!-- إعلان علوي متجاوب: يظهر بعد المقدمة دون تغطية المحتوى -->
+    <section class="ad-container ad-container--top" aria-label="مساحة إعلانية">
+        <div class="ad-shell ad-shell--responsive">
+            <span class="ad-label">إعلان</span>
+            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-client="ca-pub-5656416032906373"
+                data-ad-slot="3143411927" data-ad-format="auto" data-full-width-responsive="true"></ins>
         </div>
-    </div>
+    </section>
 
     <!-- Years Section -->
         <section id="years" class="section-dark" aria-labelledby="years-title">
@@ -365,16 +369,15 @@
         </div>
     </section>
 
-    <!-- Ad Slot 2 -->
-    <div class="ad-container">
-        <div class="ad-slot ad-slot-large">
-            <div class="ad-label">إعلان</div>
-            <div class="ad-placeholder">
-                <span class="ad-desktop">📍 مكان إعلان Google AdSense (728×90 أو 336×280)</span>
-                <span class="ad-mobile">📍 إعلان (300×250)</span>
-            </div>
+    <!-- إعلان داخل الخلاصة: يفصل بين اختيار السنة والموارد -->
+    <section class="ad-container ad-container--feed" aria-label="مساحة إعلانية">
+        <div class="ad-shell ad-shell--fluid">
+            <span class="ad-label">إعلان</span>
+            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-format="fluid"
+                data-ad-layout-key="-fr+56+4k-d4+74" data-ad-client="ca-pub-5656416032906373"
+                data-ad-slot="7867079394"></ins>
         </div>
-    </div>
+    </section>
 
     <!-- Resources Section -->
     <section id="resources" aria-labelledby="resources-title">
@@ -452,16 +455,14 @@
         </div>
     </section>
 
-    <!-- Ad Slot 3 -->
-    <div class="ad-container">
-        <div class="ad-slot">
-            <div class="ad-label">إعلان</div>
-            <div class="ad-double">
-                <div class="ad-placeholder-small">📍 إعلان (300×250)</div>
-                <div class="ad-placeholder-small">📍 إعلان (300×250)</div>
-            </div>
+    <!-- إعلان متجاوب بعد الخلاصة وقبل قسم التعريف -->
+    <section class="ad-container ad-container--section" aria-label="مساحة إعلانية">
+        <div class="ad-shell ad-shell--responsive">
+            <span class="ad-label">إعلان</span>
+            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-client="ca-pub-5656416032906373"
+                data-ad-slot="1760836049" data-ad-format="auto" data-full-width-responsive="true"></ins>
         </div>
-    </div>
+    </section>
 
     <!-- About Section -->
         <section id="about" class="section-dark" aria-labelledby="about-title">
@@ -550,16 +551,14 @@
         </div>
     </section>
 
-    <!-- Ad Slot 4 -->
-    <div class="ad-container">
-        <div class="ad-slot">
-            <div class="ad-label">إعلان</div>
-            <div class="ad-placeholder">
-                <span class="ad-desktop">📍 مكان إعلان Google AdSense (728×90)</span>
-                <span class="ad-mobile">📍 إعلان (320×50)</span>
-            </div>
+    <!-- إعلان متعدد الوحدات قرب نهاية المحتوى، بعيداً عن الأزرار والتنقل -->
+    <section class="ad-container ad-container--multiplex" aria-label="مساحة إعلانية">
+        <div class="ad-shell ad-shell--multiplex">
+            <span class="ad-label">إعلانات مقترحة</span>
+            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-format="autorelaxed"
+                data-ad-client="ca-pub-5656416032906373" data-ad-slot="6528123169"></ins>
         </div>
-    </div>
+    </section>
 
     </main>
 
