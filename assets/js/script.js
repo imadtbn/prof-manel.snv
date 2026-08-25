@@ -272,32 +272,17 @@ function getTypeIcon(type) {
     return icons[type] || 'fa-file';
 }
 
-const INLINE_ADS = [
-    { after: 3, slot: '8546947691', layoutKey: '-h9-h+8-jr+r8' },
-    { after: 6, slot: '6152718642', layoutKey: '-h6-l+d-jc+qd' }
-];
+const INLINE_AD_POSITIONS = new Set([3, 6]);
 
-function createInlineAd(adConfig) {
+function createInlineAdPlaceholder() {
     const wrapper = document.createElement('div');
     wrapper.className = 'resource-ad-card';
-    wrapper.setAttribute('aria-label', 'إعلان داخل الموارد');
+    wrapper.setAttribute('aria-label', 'مساحة إعلان فارغة داخل الموارد');
 
     const shell = document.createElement('div');
     shell.className = 'ad-shell ad-shell--fluid';
+    shell.setAttribute('aria-hidden', 'true');
 
-    const label = document.createElement('span');
-    label.className = 'ad-label';
-    label.textContent = 'إعلان';
-
-    const ad = document.createElement('ins');
-    ad.className = 'adsbygoogle ad-unit';
-    ad.style.display = 'block';
-    ad.dataset.adFormat = 'fluid';
-    ad.dataset.adLayoutKey = adConfig.layoutKey;
-    ad.dataset.adClient = 'ca-pub-5656416032906373';
-    ad.dataset.adSlot = adConfig.slot;
-
-    shell.append(label, ad);
     wrapper.appendChild(shell);
     return wrapper;
 }
@@ -374,13 +359,11 @@ function renderResources(data, page) {
         `;
         grid.appendChild(card);
 
-        // فاصل إعلاني خفيف بعد كل ثلاث بطاقات، ولا يظهر في حالة عدم وجود نتائج.
-        const inlineAd = INLINE_ADS.find(adConfig => adConfig.after === index + 1);
-        if (inlineAd) grid.appendChild(createInlineAd(inlineAd));
+        // إبقاء مواضع الإعلانات محفوظة بعد البطاقات الثالثة والسادسة.
+        if (INLINE_AD_POSITIONS.has(index + 1)) {
+            grid.appendChild(createInlineAdPlaceholder());
+        }
     });
-
-    // تهيئة الوحدات التي أُنشئت بعد التصفية أو الانتقال بين الصفحات.
-    if (typeof AdsManager !== 'undefined') AdsManager.observe();
 
     // Pagination
     if (pagination) {
@@ -802,106 +785,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// ════════════════════════════════════════
-// GOOGLE ADSENSE MANAGER
-// ════════════════════════════════════════
-const AdsManager = (() => {
-    const CONFIG = {
-        selector: '.adsbygoogle',
-        rootMargin: '360px 0px',
-        statusCheckMs: 250,
-        statusChecks: 48
-    };
 
-    const states = new WeakMap();
-    let observer;
-
-    function whenAdSenseReady() {
-        // إنشاء الطابور محلياً يسمح للسكربت الخارجي بمعالجة الطلب لاحقاً دون حجب الصفحة.
-        window.adsbygoogle = window.adsbygoogle || [];
-        return Promise.resolve(true);
-    }
-
-    function collapseIfUnfilled(ad) {
-        const shell = ad.closest('.ad-shell');
-        if (!shell) return;
-
-        let checks = 0;
-        const checkStatus = () => {
-            const status = ad.getAttribute('data-ad-status');
-            if (status === 'unfilled') {
-                shell.classList.add('is-collapsed');
-                return;
-            }
-            if (status === 'filled') {
-                shell.classList.add('is-filled');
-                return;
-            }
-            if (checks < CONFIG.statusChecks) {
-                checks += 1;
-                window.setTimeout(checkStatus, CONFIG.statusCheckMs);
-            } else {
-                shell.classList.add('is-collapsed');
-            }
-        };
-
-        checkStatus();
-    }
-
-    async function mount(ad) {
-        if (states.has(ad)) return;
-        states.set(ad, 'loading');
-
-        const ready = await whenAdSenseReady();
-        if (!ready || !document.documentElement.contains(ad)) {
-            const shell = ad.closest('.ad-shell');
-            if (shell) shell.classList.add('is-collapsed');
-            states.set(ad, 'unavailable');
-            return;
-        }
-
-        try {
-            window.adsbygoogle = window.adsbygoogle || [];
-            window.adsbygoogle.push({});
-            states.set(ad, 'mounted');
-            collapseIfUnfilled(ad);
-        } catch (error) {
-            const shell = ad.closest('.ad-shell');
-            if (shell) shell.classList.add('is-collapsed');
-            states.set(ad, 'failed');
-            console.warn('تعذر تهيئة وحدة AdSense:', error);
-        }
-    }
-
-    function observe() {
-        const ads = [...document.querySelectorAll(CONFIG.selector)].filter(ad => !states.has(ad));
-        if (!ads.length) return;
-
-        if (!('IntersectionObserver' in window)) {
-            ads.forEach(mount);
-            return;
-        }
-
-        if (!observer) {
-            observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    observer.unobserve(entry.target);
-                    mount(entry.target);
-                });
-            }, { rootMargin: CONFIG.rootMargin, threshold: 0.01 });
-        }
-
-        ads.forEach(ad => observer.observe(ad));
-    }
-
-    function init() {
-        const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 0));
-        schedule(observe, { timeout: 1200 });
-    }
-
-    return { init, observe };
-})();
 
 // ════════════════════════════════════════
 // INITIALIZE
@@ -919,7 +803,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     filterResources();
     initScrollAnimations();
-    AdsManager.init();
 
     console.log('%c🔬 موقع علوم الطبيعة جاهز!', 'color:#d4af37; font-size:14px; font-weight:bold;');
     console.log('%cتم تطويره بواسطة فريق علوم الطبيعة - 2026', 'color:#666; font-size:10px;');
