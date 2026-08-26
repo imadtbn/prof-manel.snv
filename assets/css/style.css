@@ -904,12 +904,23 @@ body {
 }
 
 .ad-shell {
+    position: relative;
+    isolation: isolate;
     width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     border: 1px solid rgba(212, 175, 55, 0.14);
     border-radius: 18px;
     background: linear-gradient(135deg, rgba(26, 35, 51, 0.54), rgba(10, 10, 15, 0.42));
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    pointer-events: none;
+    transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.ad-shell:hover {
+    border-color: rgba(212, 175, 55, 0.28);
+    background: linear-gradient(135deg, rgba(26, 35, 51, 0.66), rgba(10, 10, 15, 0.5));
 }
 
 .ad-shell--responsive {
@@ -922,6 +933,39 @@ body {
 
 .ad-shell--multiplex {
     min-height: 112px;
+}
+
+.ad-label {
+    align-self: center;
+    padding: 9px 14px 4px;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.ad-unit {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    min-height: 72px;
+    margin-inline: auto;
+}
+
+.ad-shell--fluid .ad-unit {
+    min-height: 94px;
+}
+
+.ad-shell--multiplex .ad-unit {
+    min-height: 82px;
+}
+
+.ad-shell:has(.adsbygoogle[data-ad-status="unfilled"]),
+.ad-shell.is-collapsed {
+    display: none;
 }
 
 .resource-ad-card {
@@ -2117,6 +2161,23 @@ footer {
 
     .ad-shell--multiplex {
         min-height: 92px;
+    }
+
+    .ad-label {
+        padding-top: 7px;
+        font-size: 9px;
+    }
+
+    .ad-unit {
+        min-height: 58px;
+    }
+
+    .ad-shell--fluid .ad-unit {
+        min-height: 82px;
+    }
+
+    .ad-shell--multiplex .ad-unit {
+        min-height: 72px;
     }
 
     .scroll-indicator {

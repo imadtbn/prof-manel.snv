@@ -272,17 +272,32 @@ function getTypeIcon(type) {
     return icons[type] || 'fa-file';
 }
 
-const INLINE_AD_POSITIONS = new Set([3, 6]);
+const INLINE_ADS = new Map([
+    [3, { slot: '8546947691', layoutKey: '-h9-h+8-jr+r8' }],
+    [6, { slot: '6152718642', layoutKey: '-h6-l+d-jc+qd' }]
+]);
 
-function createInlineAdPlaceholder() {
+function createInlineAd(adConfig) {
     const wrapper = document.createElement('div');
     wrapper.className = 'resource-ad-card';
-    wrapper.setAttribute('aria-label', 'مساحة إعلان فارغة داخل الموارد');
+    wrapper.setAttribute('aria-label', 'إعلان داخل الموارد');
 
     const shell = document.createElement('div');
     shell.className = 'ad-shell ad-shell--fluid';
-    shell.setAttribute('aria-hidden', 'true');
 
+    const label = document.createElement('span');
+    label.className = 'ad-label';
+    label.textContent = 'إعلان';
+
+    const ad = document.createElement('ins');
+    ad.className = 'adsbygoogle ad-unit';
+    ad.style.display = 'block';
+    ad.dataset.adFormat = 'fluid';
+    ad.dataset.adLayoutKey = adConfig.layoutKey;
+    ad.dataset.adClient = 'ca-pub-5656416032906373';
+    ad.dataset.adSlot = adConfig.slot;
+
+    shell.append(label, ad);
     wrapper.appendChild(shell);
     return wrapper;
 }
@@ -359,10 +374,9 @@ function renderResources(data, page) {
         `;
         grid.appendChild(card);
 
-        // إبقاء مواضع الإعلانات محفوظة بعد البطاقات الثالثة والسادسة.
-        if (INLINE_AD_POSITIONS.has(index + 1)) {
-            grid.appendChild(createInlineAdPlaceholder());
-        }
+        // فاصل إعلاني خفيف بعد البطاقتين الثالثة والسادسة.
+        const inlineAd = INLINE_ADS.get(index + 1);
+        if (inlineAd) grid.appendChild(createInlineAd(inlineAd));
     });
 
     // Pagination
