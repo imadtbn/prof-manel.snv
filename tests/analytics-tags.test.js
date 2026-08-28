@@ -17,10 +17,21 @@ const staticSlots = [...indexHtml.matchAll(/data-ad-slot="(\d+)"/g)].map(match =
 const inlineSlots = [...pageScript.matchAll(/slot: '(\d+)'/g)].map(match => match[1]);
 const allSlots = [...staticSlots, ...inlineSlots];
 
-test('uses one centralized AdSense loader', () => {
+test('uses one centralized third-party tags loader', () => {
     assert.equal((indexHtml.match(/assets\/js\/site-tags\.js/g) || []).length, 1);
-    assert.equal((indexHtml.match(/adsbygoogle\.js/g) || []).length, 0);
-    assert.match(siteTags, /adsbygoogle\.js/);
+    assert.equal((indexHtml.match(/google-site-verification/g) || []).length, 1);
+    assert.equal((indexHtml.match(/googletagmanager\.com\/ns\.html\?id=/g) || []).length, 1);
+    assert.doesNotMatch(indexHtml, /googletagmanager\.com\/gtag\/js|google-analytics\.com\/analytics\.js/i);
+});
+
+test('centralizes GTM and GA4 without a direct gtag config', () => {
+    assert.match(siteTags, /gtmId:\s*'GTM-N32B2XGG'/);
+    assert.match(siteTags, /ga4Id:\s*'G-BT30MKHK77'/);
+    assert.match(siteTags, /ga4Mode:\s*'gtm'/);
+    assert.match(siteTags, /googletagmanager\.com\/gtm\.js/);
+    assert.match(siteTags, /site_tags_ga4_config/);
+    assert.match(siteTags, /ga4Mode !== 'direct'/);
+    assert.match(siteTags, /if \(isConfigured\(TAG_CONFIG\.gtmId\)\) return initGtm\(\)/);
 });
 
 test('keeps the supplied AdSense slots unique and complete', () => {
@@ -33,9 +44,10 @@ test('keeps the supplied AdSense slots unique and complete', () => {
         '8546947691'
     ]);
     assert.equal(allSlots.length, new Set(allSlots).size);
+    assert.match(siteTags, /adsbygoogle\.js/);
 });
 
 test('loads no legacy direct measurement tags', () => {
-    assert.doesNotMatch(indexHtml, /googletagmanager|google-analytics|clarity\.ms/i);
-    assert.doesNotMatch(pageScript, /googletagmanager|google-analytics|clarity\.ms/i);
+    assert.doesNotMatch(indexHtml, /google-analytics\.com|clarity\.ms/i);
+    assert.doesNotMatch(pageScript, /googletagmanager\.com|google-analytics\.com|clarity\.ms/i);
 });
