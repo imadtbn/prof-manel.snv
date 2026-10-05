@@ -26,7 +26,7 @@ test('uses one centralized third-party tags loader', () => {
 
 test('centralizes GTM and GA4 without a direct gtag config', () => {
     assert.match(siteTags, /gtmId:\s*'GTM-N32B2XGG'/);
-    assert.match(siteTags, /ga4Id:\s*'G-BT30MKHK77'/);
+    assert.match(siteTags, /ga4Id:\s*'G-TTBZP0KPQF'/);
     assert.match(siteTags, /ga4Mode:\s*'gtm'/);
     assert.match(siteTags, /googletagmanager\.com\/gtm\.js/);
     assert.match(siteTags, /site_tags_ga4_config/);
