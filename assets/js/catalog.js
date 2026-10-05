@@ -223,12 +223,33 @@
         if (container) container.innerHTML = '<div class="catalog-empty"><strong>تعذر العثور على المورد</strong></div>';
     }
 
+    function injectResourceBreadcrumb() {
+        if (!location.pathname.includes('/resources/items/')) return;
+        const title = document.querySelector('h1')?.textContent?.trim() || document.title;
+        const data = {
+            '@context':'https://schema.org',
+            '@type':'BreadcrumbList',
+            itemListElement:[
+                {'@type':'ListItem',position:1,name:'الرئيسية',item:'https://imadtbn.github.io/prof-manel.snv/'},
+                {'@type':'ListItem',position:2,name:'الموارد التعليمية',item:'https://imadtbn.github.io/prof-manel.snv/resources/'},
+                {'@type':'ListItem',position:3,name:title,item:location.href}
+            ]
+        };
+        const node=document.createElement('script');
+        node.type='application/ld+json';
+        node.textContent=JSON.stringify(data);
+        document.head.appendChild(node);
+    }
+
     if ($('catalogGrid')) {
         document.addEventListener('DOMContentLoaded', initCatalog, { once: true });
     } else if ($('resourceDetail')) {
         document.addEventListener('DOMContentLoaded', initResourceDetail, { once: true });
     } else {
-        document.addEventListener('DOMContentLoaded', initTheme, { once: true });
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            injectResourceBreadcrumb();
+        }, { once: true });
     }
 })();
 // PWA bootstrap
