@@ -15,6 +15,8 @@ let resources = [];
 let filteredResources = [];
 
 async function loadResources() {
+    const loadingState = document.getElementById('loadingState');
+    if (loadingState) loadingState.style.display = 'grid';
     try {
         const response = await fetch('assets/data/resources.json', { cache: 'no-cache' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -26,6 +28,8 @@ async function loadResources() {
         resources = [];
         filteredResources = [];
         showToast('تعذر تحميل الموارد حاليًا', 'fa-triangle-exclamation');
+    } finally {
+        if (loadingState) loadingState.style.display = 'none';
     }
 }
 
@@ -187,9 +191,9 @@ function createStarField() {
 // ════════════════════════════════════════
 function createHoloCells() {
     const container = document.getElementById('holoCellContainer');
-    if (!container) return;
+    if (!container || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const cellCount = window.innerWidth <= 768 ? 3 : 6;
+    const cellCount = window.innerWidth <= 768 ? 2 : 5;
 
     for (let i = 0; i < cellCount; i++) {
         const cell = document.createElement('div');
@@ -229,9 +233,14 @@ function createHoloCells() {
 function toggleMobileMenu() {
     const menu = document.getElementById('mobileMenu');
     const overlay = document.getElementById('mobileOverlay');
-    menu.classList.toggle('active');
-    overlay.classList.toggle('active');
-    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+    const toggle = document.querySelector('.menu-toggle');
+    if (!menu || !overlay) return;
+
+    const isOpen = menu.classList.toggle('active');
+    overlay.classList.toggle('active', isOpen);
+    menu.setAttribute('aria-hidden', String(!isOpen));
+    if (toggle) toggle.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 
 // ════════════════════════════════════════
@@ -241,14 +250,17 @@ function initHeaderScroll() {
     const header = document.getElementById('mainHeader');
     if (!header) return;
 
+    let ticking = false;
+    const update = () => {
+        header.classList.toggle('is-scrolled', window.scrollY > 64);
+        ticking = false;
+    };
+
+    update();
     window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
-        const inner = header.querySelector('.header-inner');
-        if (scrollY > 100) {
-            inner.style.background = 'rgba(10, 10, 15, 0.95)';
-        } else {
-            inner.style.background = 'var(--glass)';
-        }
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
     }, { passive: true });
 }
 
@@ -300,36 +312,6 @@ function getTypeIcon(type) {
         'درس': 'fa-book-open'
     };
     return icons[type] || 'fa-file';
-}
-
-const INLINE_ADS = new Map([
-    [3, { slot: '8546947691', layoutKey: '-h9-h+8-jr+r8' }],
-    [6, { slot: '6152718642', layoutKey: '-h6-l+d-jc+qd' }]
-]);
-
-function createInlineAd(adConfig) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'resource-ad-card';
-    wrapper.setAttribute('aria-label', 'إعلان داخل الموارد');
-
-    const shell = document.createElement('div');
-    shell.className = 'ad-shell ad-shell--fluid';
-
-    const label = document.createElement('span');
-    label.className = 'ad-label';
-    label.textContent = 'إعلان';
-
-    const ad = document.createElement('ins');
-    ad.className = 'adsbygoogle ad-unit';
-    ad.style.display = 'block';
-    ad.dataset.adFormat = 'fluid';
-    ad.dataset.adLayoutKey = adConfig.layoutKey;
-    ad.dataset.adClient = 'ca-pub-5656416032906373';
-    ad.dataset.adSlot = adConfig.slot;
-
-    shell.append(label, ad);
-    wrapper.appendChild(shell);
-    return wrapper;
 }
 
 function renderResources(data, page) {
@@ -403,13 +385,7 @@ function renderResources(data, page) {
             </div>
         `;
         grid.appendChild(card);
-
-        // فاصل إعلاني خفيف بعد البطاقتين الثالثة والسادسة.
-        const inlineAd = INLINE_ADS.get(index + 1);
-        if (inlineAd) grid.appendChild(createInlineAd(inlineAd));
     });
-
-    if (window.SiteTags?.refreshAds) window.SiteTags.refreshAds();
 
     // Pagination
     if (pagination) {
