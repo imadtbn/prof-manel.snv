@@ -9,13 +9,15 @@ const CORE = [
   APP_BASE + 'assets/js/script.js',
   APP_BASE + 'assets/js/catalog.js',
   APP_BASE + 'assets/js/pwa.js',
+  APP_BASE + 'assets/js/user-features.js',
   APP_BASE + 'assets/data/resources.json',
   APP_BASE + 'assets/img/favicon.svg',
   APP_BASE + 'assets/img/icon-maskable.svg',
   APP_BASE + 'resources/',
   APP_BASE + 'years/first-year.html',
   APP_BASE + 'years/second-year.html',
-  APP_BASE + 'years/third-year.html'
+  APP_BASE + 'years/third-year.html',
+  APP_BASE + 'favorites.html'
 ];
 
 self.addEventListener('install', event => {
