@@ -12,7 +12,7 @@
     <meta name="google-site-verification" content="f5Xi4oFx0v5dN6iPZd9qCw-7vnc3vIbAeYF9jr4vwVM">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#0a0a0f">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="dark light">
 
     <link rel="canonical" href="https://imadtbn.github.io/prof-manel.snv/">
     <link rel="alternate" hreflang="ar-DZ" href="https://imadtbn.github.io/prof-manel.snv/">
@@ -86,7 +86,6 @@
           "name": "علوم الطبيعة - الأستاذة بوسنة منال",
           "url": "https://imadtbn.github.io/prof-manel.snv/",
           "description": "منصة تعليمية جزائرية متخصصة في موارد علوم الطبيعة للسنوات الثلاثة الثانوية.",
-          "email": "contact@sciencesnaturelles.dz",
           "areaServed": { "@type": "Country", "name": "الجزائر" },
           "knowsAbout": ["علوم الطبيعة", "التعليم الثانوي", "البكالوريا الجزائرية"]
         }
@@ -94,15 +93,6 @@
     }
     </script>
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TTBZP0KPQF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TTBZP0KPQF');
-</script>
     
 </head>
 
@@ -616,16 +606,12 @@
             <div class="footer-contact">
                 <h4>معلومات الاتصال</h4>
                 <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>contact@sciencesnaturelles.dz</span>
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>منصة تعليمية جزائرية لمادة علوم الطبيعة والحياة</span>
                 </div>
                 <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span dir="ltr">+213 555 123 456</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>الجزائر العاصمة، الجزائر</span>
+                    <i class="fas fa-user-shield"></i>
+                    <span>تُضاف وسائل الاتصال الرسمية بعد التحقق منها</span>
                 </div>
                 <div class="copyright">
                     <div>© ٢٠٢٦ جميع الحقوق محفوظة</div>
@@ -636,14 +622,14 @@
     </footer>
 
     <!-- Preview Modal -->
-    <div id="previewModal" class="modal-overlay" onclick="closePreviewModal(event)">
+    <div id="previewModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="closePreviewModal(event)">
         <div class="modal-box" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <div>
                     <h3 id="modalTitle">عنوان الملف</h3>
                     <p id="modalMeta">سنة 2 • رياضيات • فرض</p>
                 </div>
-                <button onclick="closePreviewModal()" class="modal-close">
+                <button onclick="closePreviewModal()" class="modal-close" aria-label="إغلاق المعاينة">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -677,11 +663,11 @@
     </div>
 
     <!-- Page Modal -->
-    <div id="pageModal" class="modal-overlay" onclick="closePageModal(event)">
+    <div id="pageModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pageModalTitle" onclick="closePageModal(event)">
         <div class="modal-box modal-box-scroll" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h3 id="pageModalTitle">العنوان</h3>
-                <button onclick="closePageModal()" class="modal-close">
+                <button onclick="closePageModal()" class="modal-close" aria-label="إغلاق النافذة">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -696,7 +682,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="assets/js/script.js"></script>
+    <script defer src="assets/js/script.js"></script>
     <script defer src="assets/js/site-tags.js?v=20260828-gtm"></script>
 </body>
 
