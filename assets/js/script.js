@@ -9,24 +9,26 @@ const CONFIG = {
 };
 
 // ════════════════════════════════════════
-// SAMPLE RESOURCES DATA (Expandable)
+// RESOURCE DATA
 // ════════════════════════════════════════
-let resources = [
-    { id: 1, title: "فرض الفصل الأول - التنظيم الهرموني", year: "2", stream: "رياضيات", type: "فرض", date: "2025", download: "https://drive.google.com/file/d/sample1/view", desc: "مع التصحيح الكامل PDF - 12 صفحة", size: "2.4 MB", pages: 12 },
-    { id: 2, title: "اختبار البكالوريا - الجهاز المناعي", year: "3", stream: "تقني", type: "اختبار", date: "2024", download: "https://drive.google.com/file/d/sample2/view", desc: "نموذج وزاري مع التصحيح", size: "1.8 MB", pages: 8 },
-    { id: 3, title: "تمارين الفصل الثاني - الوراثة", year: "1", stream: "اداب", type: "تمارين", date: "2025", download: "https://drive.google.com/file/d/sample3/view", desc: "٢٥ تمرين + حلول مفصلة", size: "3.1 MB", pages: 25 },
-    { id: 4, title: "فرض تكميلي - التنوع البيولوجي", year: "2", stream: "رياضيات", type: "فرض", date: "2025", download: "https://drive.google.com/file/d/sample4/view", desc: "شعبة علوم تجريبية", size: "1.5 MB", pages: 6 },
-    { id: 5, title: "درس - التنفس الخلوي", year: "2", stream: "علوم", type: "درس", date: "2025", download: "https://drive.google.com/file/d/sample5/view", desc: "ملخص شامل مع رسوم توضيحية", size: "4.2 MB", pages: 18 },
-    { id: 6, title: "فرض الفصل الثالث - التكاثر", year: "1", stream: "رياضيات", type: "فرض", date: "2025", download: "https://drive.google.com/file/d/sample6/view", desc: "مع التصحيح والتقييم", size: "2.0 MB", pages: 10 },
-    { id: 7, title: "اختبار الفصل الأول - الغدد الصماء", year: "3", stream: "علوم", type: "اختبار", date: "2024", download: "https://drive.google.com/file/d/sample7/view", desc: "نموذج تحضيري للبكالوريا", size: "2.8 MB", pages: 14 },
-    { id: 8, title: "تمارين - البيئة والتطور", year: "2", stream: "تقني", type: "تمارين", date: "2025", download: "https://drive.google.com/file/d/sample8/view", desc: "تمارين تطبيقية مع حلول", size: "1.9 MB", pages: 15 },
-    { id: 9, title: "فرض - التغذية عند النبات", year: "1", stream: "اداب", type: "فرض", date: "2025", download: "https://drive.google.com/file/d/sample9/view", desc: "فرض الفصل الأول", size: "1.2 MB", pages: 5 },
-    { id: 10, title: "اختبار موحد - علم الأحياء", year: "3", stream: "رياضيات", type: "اختبار", date: "2024", download: "https://drive.google.com/file/d/sample10/view", desc: "اختبار شهادة البكالوريا", size: "3.5 MB", pages: 20 },
-    { id: 11, title: "درس - الجهاز العصبي", year: "2", stream: "اداب", type: "درس", date: "2025", download: "https://drive.google.com/file/d/sample11/view", desc: "درس تفاعلي مع فيديو", size: "5.1 MB", pages: 22 },
-    { id: 12, title: "فرض - الهرمونات والتنظيم", year: "2", stream: "علوم", type: "فرض", date: "2025", download: "https://drive.google.com/file/d/sample12/view", desc: "فرض الفصل الثاني", size: "2.3 MB", pages: 11 },
-];
+let resources = [];
+let filteredResources = [];
 
-let filteredResources = [...resources];
+async function loadResources() {
+    try {
+        const response = await fetch('assets/data/resources.json', { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        resources = Array.isArray(payload) ? payload : (payload.resources || []);
+        filteredResources = [...resources];
+    } catch (error) {
+        console.error('تعذر تحميل بيانات الموارد:', error);
+        resources = [];
+        filteredResources = [];
+        showToast('تعذر تحميل الموارد حاليًا', 'fa-triangle-exclamation');
+    }
+}
+
 let currentPreviewResource = null;
 
 // ════════════════════════════════════════
@@ -92,52 +94,60 @@ function createStarField() {
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    let width, height, stars = [];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let width = 0;
+    let height = 0;
+    let stars = [];
+    let animationId = null;
+    let isVisible = !document.hidden;
 
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
+    const getStarCount = () => reducedMotion ? 0 : (window.innerWidth <= 768 ? 36 : window.innerWidth <= 1200 ? 60 : 84);
+    const shouldConnectStars = () => window.innerWidth > 768 && !reducedMotion;
 
     class Star {
         constructor() { this.reset(); }
         reset() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.size = Math.random() * 2.2 + 0.6;
-            this.speed = Math.random() * 0.5 + 0.1;
-            this.brightness = Math.random() * 0.5 + 0.5;
+            this.size = Math.random() * 1.6 + 0.4;
+            this.speed = Math.random() * 0.25 + 0.05;
+            this.brightness = Math.random() * 0.4 + 0.35;
         }
-        update() {
-            this.y += this.speed;
-            if (this.y > height) this.reset();
-        }
+        update() { this.y += this.speed; if (this.y > height) this.reset(); }
         draw() {
             ctx.fillStyle = '#f5e8c7';
-            ctx.globalAlpha = this.brightness * (Math.random() * 0.4 + 0.6);
+            ctx.globalAlpha = this.brightness;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
         }
     }
 
-    function initStars(count) {
-        stars = [];
-        for (let i = 0; i < count; i++) stars.push(new Star());
+    function initStars() { stars = Array.from({ length: getStarCount() }, () => new Star()); }
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        initStars();
     }
 
     function connectStars() {
+        if (!shouldConnectStars()) return;
         ctx.strokeStyle = '#d4af37';
-        ctx.lineWidth = 0.6;
+        ctx.lineWidth = 0.5;
         for (let i = 0; i < stars.length; i++) {
             for (let j = i + 1; j < stars.length; j++) {
                 const dx = stars[i].x - stars[j].x;
                 const dy = stars[i].y - stars[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 130) {
-                    ctx.globalAlpha = (130 - distance) / 130 * 0.12;
+                const distanceSquared = dx * dx + dy * dy;
+                if (distanceSquared < 10000) {
+                    ctx.globalAlpha = (10000 - distanceSquared) / 10000 * 0.08;
                     ctx.beginPath();
                     ctx.moveTo(stars[i].x, stars[i].y);
                     ctx.lineTo(stars[j].x, stars[j].y);
@@ -149,17 +159,27 @@ function createStarField() {
     }
 
     function animate() {
-        ctx.fillStyle = 'rgba(10, 10, 15, 0.08)';
-        ctx.fillRect(0, 0, width, height);
+        if (!isVisible || reducedMotion) { animationId = null; return; }
+        ctx.clearRect(0, 0, width, height);
         stars.forEach(star => { star.update(); star.draw(); });
         connectStars();
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', () => { resize(); initStars(220); });
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+        isVisible = !document.hidden;
+        if (isVisible && !animationId && !reducedMotion) animate();
+        if (!isVisible && animationId) { cancelAnimationFrame(animationId); animationId = null; }
+    });
+
     resize();
-    initStars(220);
-    animate();
+    if (!reducedMotion) animate();
 }
 
 // ════════════════════════════════════════
@@ -169,7 +189,7 @@ function createHoloCells() {
     const container = document.getElementById('holoCellContainer');
     if (!container) return;
 
-    const cellCount = 8;
+    const cellCount = window.innerWidth <= 768 ? 3 : 6;
 
     for (let i = 0; i < cellCount; i++) {
         const cell = document.createElement('div');
@@ -235,18 +255,28 @@ function initHeaderScroll() {
 // ════════════════════════════════════════
 // THEME TOGGLE
 // ════════════════════════════════════════
-function toggleDarkMode() {
+function applyTheme(theme, persist = true) {
+    const normalized = theme === 'light' ? 'light' : 'dark';
+    CONFIG.isDarkMode = normalized === 'dark';
+    document.documentElement.dataset.theme = normalized;
+    document.documentElement.style.colorScheme = normalized;
     const icon = document.getElementById('themeIcon');
-    if (!icon) return;
-
-    CONFIG.isDarkMode = !CONFIG.isDarkMode;
-    if (CONFIG.isDarkMode) {
-        icon.className = 'fas fa-moon';
-        showToast('تم تفعيل الوضع الليلي', 'fa-moon');
-    } else {
-        icon.className = 'fas fa-sun';
-        showToast('تم تفعيل الوضع النهاري', 'fa-sun');
+    if (icon) icon.className = CONFIG.isDarkMode ? 'fas fa-moon' : 'fas fa-sun';
+    if (persist) {
+        try { localStorage.setItem('snv-theme', normalized); } catch (_) {}
     }
+}
+
+function initTheme() {
+    let saved = null;
+    try { saved = localStorage.getItem('snv-theme'); } catch (_) {}
+    applyTheme(saved === 'light' ? 'light' : 'dark', false);
+}
+
+function toggleDarkMode() {
+    const nextTheme = CONFIG.isDarkMode ? 'light' : 'dark';
+    applyTheme(nextTheme);
+    showToast(nextTheme === 'dark' ? 'تم تفعيل الوضع الليلي' : 'تم تفعيل الوضع النهاري', nextTheme === 'dark' ? 'fa-moon' : 'fa-sun');
 }
 
 // ════════════════════════════════════════
@@ -365,9 +395,9 @@ function renderResources(data, page) {
                         <button onclick="event.stopPropagation(); openPreviewById(${res.id})" class="card-btn card-btn-preview" title="معاينة" aria-label="معاينة ${res.title}">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <a href="${res.download}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="card-btn card-btn-download" title="تحميل" aria-label="تحميل ${res.title}">
-                            <i class="fas fa-download"></i>
-                        </a>
+                        ${res.download
+                            ? `<a href="${res.download}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="card-btn card-btn-download" title="تحميل" aria-label="تحميل ${res.title}"><i class="fas fa-download"></i></a>`
+                            : `<button type="button" class="card-btn card-btn-disabled" disabled title="الملف قيد الإضافة" aria-label="الملف قيد الإضافة"><i class="fas fa-clock"></i></button>`}
                     </div>
                 </div>
             </div>
@@ -378,6 +408,8 @@ function renderResources(data, page) {
         const inlineAd = INLINE_ADS.get(index + 1);
         if (inlineAd) grid.appendChild(createInlineAd(inlineAd));
     });
+
+    if (window.SiteTags?.refreshAds) window.SiteTags.refreshAds();
 
     // Pagination
     if (pagination) {
@@ -490,7 +522,17 @@ function openPreview(res) {
     if (modalTitle) modalTitle.textContent = res.title;
     if (modalMeta) modalMeta.textContent = `سنة ${res.year} • ${res.stream} • ${res.type} • ${res.pages} صفحة`;
     if (previewDocTitle) previewDocTitle.textContent = res.title;
-    if (modalDownload) modalDownload.href = res.download;
+    if (modalDownload) {
+        if (res.download) {
+            modalDownload.href = res.download;
+            modalDownload.removeAttribute('aria-disabled');
+            modalDownload.classList.remove('is-disabled');
+        } else {
+            modalDownload.removeAttribute('href');
+            modalDownload.setAttribute('aria-disabled', 'true');
+            modalDownload.classList.add('is-disabled');
+        }
+    }
 
     const modal = document.getElementById('previewModal');
     if (modal) {
@@ -518,15 +560,16 @@ function printResource() {
 
 function shareResource() {
     if (!currentPreviewResource) return;
+    const shareUrl = currentPreviewResource.download || window.location.href;
 
     if (navigator.share) {
         navigator.share({
             title: currentPreviewResource.title,
             text: currentPreviewResource.desc,
-            url: currentPreviewResource.download
+            url: shareUrl
         });
     } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(currentPreviewResource.download).then(() => {
+        navigator.clipboard.writeText(shareUrl).then(() => {
             showToast('تم نسخ الرابط!', 'fa-link');
         });
     }
@@ -637,41 +680,11 @@ const pageContents = {
     'contact': {
         title: 'اتصل بنا',
         content: `
-            <div style="display:flex;flex-direction:column;gap:24px;">
-                <p style="color:var(--text-secondary);">نحن هنا لمساعدتك! يمكنك التواصل معنا عبر أي من القنوات التالية:</p>
-
-                <div style="display:flex;flex-direction:column;gap:12px;">
-                    <div style="display:flex;align-items:center;gap:16px;background:var(--card-bg);border-radius:12px;padding:16px;">
-                        <div style="width:48px;height:48px;background:rgba(212,175,55,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-envelope" style="color:var(--gold);"></i></div>
-                        <div>
-                            <div style="font-size:13px;color:var(--text-secondary);">البريد الإلكتروني</div>
-                            <div style="font-weight:600;">contact@sciencesnaturelles.dz</div>
-                        </div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:16px;background:var(--card-bg);border-radius:12px;padding:16px;">
-                        <div style="width:48px;height:48px;background:rgba(16,185,129,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;"><i class="fab fa-whatsapp" style="color:var(--emerald);"></i></div>
-                        <div>
-                            <div style="font-size:13px;color:var(--text-secondary);">واتساب</div>
-                            <div style="font-weight:600;direction:ltr;text-align:right;">+213 555 123 456</div>
-                        </div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:16px;background:var(--card-bg);border-radius:12px;padding:16px;">
-                        <div style="width:48px;height:48px;background:rgba(59,130,246,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;"><i class="fab fa-facebook" style="color:#60a5fa;"></i></div>
-                        <div>
-                            <div style="font-size:13px;color:var(--text-secondary);">صفحة الفيسبوك</div>
-                            <div style="font-weight:600;">Sciences Naturelles</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background:var(--card-bg);border-radius:16px;padding:24px;">
-                    <h4 style="font-weight:700;margin-bottom:16px;">أرسل رسالة</h4>
-                    <form onsubmit="event.preventDefault(); showToast('تم إرسال رسالتك!', 'fa-paper-plane'); closePageModal();" style="display:flex;flex-direction:column;gap:12px;">
-                        <input type="text" placeholder="الاسم" required style="width:100%;background:var(--void);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;color:var(--text-primary);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:var(--transition);">
-                        <input type="email" placeholder="البريد الإلكتروني" required style="width:100%;background:var(--void);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;color:var(--text-primary);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:var(--transition);">
-                        <textarea placeholder="رسالتك" rows="4" required style="width:100%;background:var(--void);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;color:var(--text-primary);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:var(--transition);resize:none;"></textarea>
-                        <button type="submit" style="width:100%;padding:14px;background:var(--gold);color:var(--void);font-weight:600;border-radius:12px;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:15px;transition:var(--transition);">إرسال</button>
-                    </form>
+            <div style="display:flex;flex-direction:column;gap:20px;">
+                <div style="background:var(--card-bg);border-radius:16px;padding:24px;text-align:center;">
+                    <div style="font-size:42px;margin-bottom:12px;">✉️</div>
+                    <h4 style="color:var(--gold);font-size:18px;font-weight:700;margin-bottom:8px;">وسائل الاتصال الرسمية قيد الإعداد</h4>
+                    <p style="color:var(--text-secondary);">لن نعرض بريدًا أو رقم هاتف غير متحقق منه. ستُضاف قنوات التواصل الرسمية هنا فور اعتمادها.</p>
                 </div>
             </div>
         `
@@ -804,11 +817,13 @@ document.addEventListener('keydown', (e) => {
 // ════════════════════════════════════════
 // INITIALIZE
 // ════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    initTheme();
     createStarField();
     createHoloCells();
     initHeaderScroll();
     initSmoothScroll();
+    await loadResources();
     updateDynamicStats();
 
     const initialQuery = new URLSearchParams(window.location.search).get('q');
