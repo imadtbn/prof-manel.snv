@@ -987,9 +987,9 @@ body {
     min-height: 82px;
 }
 
-.ad-shell:has(.adsbygoogle[data-ad-status="unfilled"]),
-.ad-shell.is-collapsed {
-    display: none;
+.ad-shell:has(.adsbygoogle[data-ad-status="unfilled"]) {
+    /* Keep the reserved space to avoid layout shift when AdSense has no fill. */
+    opacity: 1;
 }
 
 .resource-ad-card {
@@ -2310,10 +2310,18 @@ footer {
     min-height: 100px;
 }
 
-.ad-shell.is-collapsed {
-    min-height: 0;
-    border-width: 0;
-    margin: 0;
+.ad-container--site {
+    width: 100%;
+}
+
+.ad-container--site .ad-shell {
+    min-height: 100px;
+}
+
+@media (max-width: 768px) {
+    .ad-container--site .ad-shell {
+        min-height: 92px;
+    }
 }
 
 @media (hover: none), (pointer: coarse) {
