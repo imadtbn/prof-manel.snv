@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+<title>علوم الطبيعة</title>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4af37"/><stop offset="1" stop-color="#f5e8c7"/></linearGradient></defs>
+<rect width="512" height="512" fill="#0a0a0f"/>
+<circle cx="256" cy="256" r="188" fill="#111827" stroke="#d4af37" stroke-width="18"/>
+<path d="M204 112h88v46h-24v144c0 69-51 110-111 110v-48c34 0 63-22 63-62V158h-16z" fill="url(#g)"/>
+<path d="M156 366h230v48H156zM316 128h88v48h-88z" fill="#10b981"/>
+<circle cx="250" cy="298" r="24" fill="#0a0a0f"/>
+</svg>
