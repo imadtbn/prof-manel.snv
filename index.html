@@ -135,13 +135,13 @@
                 <i class="fas fa-graduation-cap"></i>
                 <span>السنوات الدراسية</span>
             </a>
-            <a href="#resources" onclick="toggleMobileMenu()">
+            <a href="resources/index.html">
                 <i class="fas fa-book"></i>
                 <span>الموارد</span>
             </a>
-            <a href="#about" onclick="toggleMobileMenu()">
+            <a href="about.html">
                 <i class="fas fa-info-circle"></i>
-                <span>عن الموقع</span>
+                <span>عن الأستاذة</span>
             </a>
         </nav>
         <div class="mobile-footer">
@@ -149,11 +149,11 @@
                 <i class="fas fa-shield-alt"></i>
                 <span>سياسة الخصوصية</span>
             </a>
-            <a href="#" onclick="toggleMobileMenu(); openPageModal('contact')">
+            <a href="contact.html">
                 <i class="fas fa-envelope"></i>
                 <span>اتصل بنا</span>
             </a>
-            <a href="#" onclick="toggleMobileMenu(); openPageModal('about-page')">
+            <a href="about.html">
                 <i class="fas fa-users"></i>
                 <span>من نحن</span>
             </a>
@@ -175,10 +175,10 @@
 
                 <!-- Desktop Navigation -->
                 <nav class="desktop-nav" aria-label="التنقل الرئيسي">
-                    <a href="#hero" class="nav-link">الرئيسية</a>
+                    <a href="./" class="nav-link">الرئيسية</a>
                     <a href="#years" class="nav-link">السنوات الدراسية</a>
-                    <a href="#resources" class="nav-link">الموارد</a>
-                    <a href="#about" class="nav-link">عن الموقع</a>
+                    <a href="resources/index.html" class="nav-link">الموارد</a>
+                    <a href="about.html" class="nav-link">عن الأستاذة</a>
                 </nav>
 
                 <!-- Search Bar -->
@@ -232,10 +232,10 @@
                 </div>        -->
 
                 <div class="hero-buttons">
-                    <button onclick="navigateToSection('resources')" class="btn-primary">
+                    <a href="resources/index.html" class="btn-primary">
                         تصفح الموارد
                         <i class="fas fa-arrow-left"></i>
-                    </button>
+                    </a>
                     <button onclick="navigateToSection('years')" class="btn-outline">
                         اختر السنة
                     </button>
@@ -299,7 +299,7 @@
 
             <div class="years-grid">
                 <!-- Year 1 -->
-                <div onclick="selectYear(1)" class="year-card" data-year-card="1">
+                <a href="years/first-year.html" class="year-card" data-year-card="1">
                     <div class="year-label">السنة الأولى</div>
                     <div class="year-number">01</div>
                     <div class="year-stats">
@@ -320,10 +320,10 @@
                         <span>عرض الموارد</span>
                         <i class="fas fa-arrow-left"></i>
                     </div>
-                </div>
+                </a>
 
                 <!-- Year 2 -->
-                <div onclick="selectYear(2)" class="year-card year-card-popular" data-year-card="2">
+                <a href="years/second-year.html" class="year-card year-card-popular" data-year-card="2">
                     <div class="popular-badge">الأكثر طلباً</div>
                     <div class="year-label">السنة الثانية</div>
                     <div class="year-number">02</div>
@@ -345,10 +345,10 @@
                         <span>عرض الموارد</span>
                         <i class="fas fa-arrow-left"></i>
                     </div>
-                </div>
+                </a>
 
                 <!-- Year 3 -->
-                <div onclick="selectYear(3)" class="year-card" data-year-card="3">
+                <a href="years/third-year.html" class="year-card" data-year-card="3">
                     <div class="year-label">السنة الثالثة</div>
                     <div class="year-number">03</div>
                     <div class="year-stats">
@@ -369,7 +369,7 @@
                         <span>عرض الموارد</span>
                         <i class="fas fa-arrow-left"></i>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -560,19 +560,19 @@
 
             <div class="footer-links">
                 <h4>روابط سريعة</h4>
-                <a href="#years">السنة الأولى</a>
-                <a href="#years">السنة الثانية</a>
-                <a href="#years">السنة الثالثة</a>
-                <a href="#resources">شعبة الرياضيات</a>
-                <a href="#resources">آداب وفلسفة</a>
+                <a href="years/first-year.html">السنة الأولى</a>
+                <a href="years/second-year.html">السنة الثانية</a>
+                <a href="years/third-year.html">السنة الثالثة</a>
+                <a href="resources/index.html">كل الموارد</a>
+                <a href="about.html">عن الأستاذة</a>
             </div>
 
             <div class="footer-legal">
                 <h4>معلومات قانونية</h4>
                 <a href="#" onclick="openPageModal('privacy')"><i class="fas fa-shield-alt"></i>سياسة الخصوصية</a>
                 <a href="#" onclick="openPageModal('terms')"><i class="fas fa-file-contract"></i>شروط الاستخدام</a>
-                <a href="#" onclick="openPageModal('about-page')"><i class="fas fa-users"></i>من نحن</a>
-                <a href="#" onclick="openPageModal('contact')"><i class="fas fa-envelope"></i>اتصل بنا</a>
+                <a href="about.html"><i class="fas fa-users"></i>عن الأستاذة</a>
+                <a href="contact.html"><i class="fas fa-envelope"></i>اتصل بنا</a>
                 <a href="https://imadtbn.github.io/dz_portal/" onclick="openPageModal('')"><i
                         class="fas fa-digital-tachograph"></i>البوابة الجزائرية للخدمات الرقمية</a>
 
