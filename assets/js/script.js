@@ -341,6 +341,7 @@ function renderResources(data, page) {
     pageData.forEach((res, index) => {
         const card = document.createElement('article');
         card.className = 'resource-card';
+        card.dataset.resourceSlug = res.slug;
         card.tabIndex = 0;
         card.setAttribute('aria-label', `${res.title} - سنة ${res.year} - ${res.stream}`);
         card.onclick = function() {
@@ -389,6 +390,7 @@ function renderResources(data, page) {
         `;
         grid.appendChild(card);
     });
+    document.dispatchEvent(new CustomEvent('snv:resources-rendered',{detail:{root:grid}}));
 
     // Pagination
     if (pagination) {
@@ -431,7 +433,7 @@ function filterResources() {
     const yearVal = document.getElementById('yearFilter')?.value || '';
     const streamVal = document.getElementById('streamFilter')?.value.toLowerCase() || '';
     const typeVal = document.getElementById('typeFilter')?.value || '';
-    const searchVal = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
+    const searchVal = document.getElementById('searchInput')?.value.trim() || '';
 
     // Keep the shareable search state in the URL without forcing a reload.
     const url = new URL(window.location.href);
@@ -443,12 +445,14 @@ function filterResources() {
         const matchYear = !yearVal || res.year === yearVal;
         const matchStream = !streamVal || res.stream.toLowerCase().includes(streamVal);
         const matchType = !typeVal || res.type === typeVal;
-        const matchSearch = !searchVal ||
-            res.title.toLowerCase().includes(searchVal) ||
-            res.desc.toLowerCase().includes(searchVal);
-        return matchYear && matchStream && matchType && matchSearch;
+        const searchScore = !searchVal ? 1 : (window.SNVFeatures?.smartScore
+            ? window.SNVFeatures.smartScore(res, searchVal)
+            : ([res.title,res.desc,res.unit,res.stream].filter(Boolean).join(' ').toLowerCase().includes(searchVal.toLowerCase()) ? 1 : 0));
+        res.__searchScore = searchScore;
+        return matchYear && matchStream && matchType && searchScore > 0;
     });
 
+    if (searchVal) filteredResources.sort((a,b)=>(b.__searchScore||0)-(a.__searchScore||0));
     CONFIG.currentPage = 1;
     renderResources(filteredResources, 1);
 }
@@ -817,5 +821,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('%c🔬 موقع علوم الطبيعة جاهز!', 'color:#d4af37; font-size:14px; font-weight:bold;');
     console.log('%cتم تطويره بواسطة فريق علوم الطبيعة - 2026', 'color:#666; font-size:10px;');
 });
-// PWA bootstrap
-(() => { const s=document.createElement('script'); s.src='assets/js/pwa.js'; s.defer=true; document.head.appendChild(s); })();
+// Shared PWA and user features
+(() => {
+    for (const src of ['assets/js/pwa.js','assets/js/user-features.js']) {
+        if (document.querySelector('script[src="'+src+'"]')) continue;
+        const s=document.createElement('script'); s.src=src; s.defer=true; document.head.appendChild(s);
+    }
+})();
