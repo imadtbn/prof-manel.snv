@@ -13,9 +13,8 @@
         gtmSrc: 'https://www.googletagmanager.com/gtm.js',
         adsenseSrc: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
         adSelector: 'ins.adsbygoogle',
-        adRootMargin: '180px 0px',
-        adStatusCheckDelay: 250,
-        adStatusCheckLimit: 48
+        adSlot: '3143411927',
+        adRootMargin: '180px 0px'
     });
 
     const mountedAds = new WeakSet();
@@ -115,6 +114,34 @@
         return initDirectGa4();
     }
 
+    function ensureAdSlot() {
+        const existing = document.querySelector(TAG_CONFIG.adSelector);
+        if (existing) return existing;
+
+        const main = document.querySelector('main');
+        if (!main) return null;
+
+        const container = document.createElement('section');
+        container.className = 'ad-container ad-container--site';
+        container.setAttribute('aria-label', 'إعلان');
+        container.innerHTML = `
+            <div class="ad-shell ad-shell--responsive">
+                <span class="ad-label">إعلان</span>
+                <ins class="adsbygoogle ad-unit"
+                    style="display:block"
+                    data-ad-client="${TAG_CONFIG.adsenseClient}"
+                    data-ad-slot="${TAG_CONFIG.adSlot}"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+            </div>`;
+
+        const firstSection = main.querySelector('section');
+        if (firstSection) firstSection.insertAdjacentElement('afterend', container);
+        else main.prepend(container);
+
+        return container.querySelector(TAG_CONFIG.adSelector);
+    }
+
     function getAds() {
         return [...document.querySelectorAll(TAG_CONFIG.adSelector)];
     }
@@ -134,30 +161,6 @@
         return promise;
     }
 
-    function collapseUnfilledAd(ad) {
-        const shell = ad.closest('.ad-shell');
-        if (!shell) return;
-
-        let checks = 0;
-        const checkStatus = () => {
-            const status = ad.getAttribute('data-ad-status');
-            if (status === 'unfilled') {
-                shell.classList.add('is-collapsed');
-                return;
-            }
-            if (status === 'filled') {
-                shell.classList.add('is-filled');
-                return;
-            }
-            if (checks < TAG_CONFIG.adStatusCheckLimit) {
-                checks += 1;
-                window.setTimeout(checkStatus, TAG_CONFIG.adStatusCheckDelay);
-            }
-        };
-
-        checkStatus();
-    }
-
     function mountAd(ad) {
         if (mountedAds.has(ad)) return;
         mountedAds.add(ad);
@@ -165,7 +168,6 @@
         loadAdSense().then(ready => {
             if (!ready || !document.documentElement.contains(ad)) return;
             getAdSenseQueue().push({});
-            collapseUnfilledAd(ad);
         });
     }
 
@@ -206,8 +208,8 @@
 
     function init() {
         initMeasurement();
+        ensureAdSlot();
         scheduleAdRefresh();
-
     }
 
     window.SiteTags = Object.freeze({
