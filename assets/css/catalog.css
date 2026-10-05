@@ -242,3 +242,88 @@
 }
 
 .feature-icon-btn,.feature-action{font-family:'Cairo',sans-serif}.feature-icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.feature-icon-btn.active{color:#ef4444;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08)}.resource-feature-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.feature-action{min-height:44px;padding:10px 16px;border-radius:12px;border:1px solid var(--glass-border);background:var(--card-bg);color:var(--text-primary);display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}.feature-action.primary{background:var(--gold);color:var(--void);border-color:var(--gold)}.local-stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;color:var(--text-muted);font-size:12px}.local-stats span{padding:7px 10px;border-radius:999px;background:rgba(212,175,55,.06)}.related-resources{margin-top:42px}.related-resources h2{margin-bottom:18px;color:var(--gold)}.personal-section{margin-bottom:56px}.personal-rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.personal-rank-grid>section{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:20px;padding:22px}.personal-rank-grid h2{font-size:18px;margin-bottom:14px}.local-ranking{display:flex;flex-direction:column;gap:8px}.local-ranking a{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--glass-border);color:var(--text-primary);text-decoration:none}.local-ranking strong{white-space:nowrap;color:var(--gold);font-size:12px}.feature-resource-card .card-title a{color:inherit;text-decoration:none}.feature-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,70px);opacity:0;z-index:2500;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:11px 18px;transition:.25s;pointer-events:none}.feature-toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:768px){.personal-rank-grid{grid-template-columns:1fr}.resource-feature-actions{display:grid;grid-template-columns:1fr 1fr}.feature-action{justify-content:center}.local-ranking a{align-items:flex-start}}
+
+/* Resource detail actions — equal visual weight */
+.resource-detail-card .resource-feature-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.resource-detail-card .resource-feature-actions .feature-action {
+    width: auto;
+    min-width: 138px;
+    min-height: 46px;
+    height: 46px;
+    padding: 0 18px;
+    margin: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, .28);
+    background: rgba(255, 255, 255, .025);
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    line-height: 1;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+
+.resource-detail-card .resource-feature-actions .feature-action i {
+    width: 18px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1;
+}
+
+.resource-detail-card .resource-feature-actions .favorite-toggle {
+    /* Override the 36x36 icon-only card button dimensions. */
+    width: auto;
+    height: 46px;
+}
+
+.resource-detail-card .resource-feature-actions .favorite-toggle.active {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, .38);
+    background: rgba(239, 68, 68, .08);
+}
+
+.resource-detail-card .resource-feature-actions .feature-action:hover {
+    border-color: rgba(212, 175, 55, .62);
+    background: rgba(212, 175, 55, .07);
+}
+
+.resource-detail-card .resource-feature-actions .feature-action.primary {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--void);
+}
+
+@media (max-width: 768px) {
+    .resource-detail-card .resource-feature-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .resource-detail-card .resource-feature-actions .feature-action,
+    .resource-detail-card .resource-feature-actions .favorite-toggle {
+        width: 100%;
+        min-width: 0;
+        height: 46px;
+        padding-inline: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .resource-detail-card .resource-feature-actions {
+        grid-template-columns: 1fr;
+    }
+}
