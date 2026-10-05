@@ -74,6 +74,7 @@
         data.forEach(res => {
             const card = document.createElement('a');
             card.className = 'resource-card';
+            card.dataset.resourceSlug = res.slug;
             card.href = base + (res.permalink || ('resources/items/' + res.slug + '.html'));
             card.innerHTML = `
                 <div class="card-top-bar"></div>
@@ -96,10 +97,11 @@
             fragment.appendChild(card);
         });
         grid.appendChild(fragment);
+        document.dispatchEvent(new CustomEvent('snv:resources-rendered',{detail:{root:grid}}));
     }
 
     function filter() {
-        const q = ($('catalogSearch')?.value || '').trim().toLowerCase();
+        const q = ($('catalogSearch')?.value || '').trim();
         const stream = $('streamFilter')?.value || '';
         const type = $('typeFilter')?.value || '';
         const term = $('termFilter')?.value || '';
@@ -113,10 +115,12 @@
             const matchTerm = !term || String(r.term || '') === term;
             const matchUnit = !unit || r.unit === unit;
             const matchCorrection = !correction || r.correctionStatus === correction;
-            const haystack = [r.title, r.desc, r.stream, r.type, r.unit, r.academicYear].filter(Boolean).join(' ').toLowerCase();
-            return matchYear && matchStream && matchType && matchTerm && matchUnit && matchCorrection && (!q || haystack.includes(q));
+            const score = q ? (window.SNVFeatures?.smartScore ? window.SNVFeatures.smartScore(r,q) : ([r.title,r.desc,r.stream,r.type,r.unit,r.academicYear].filter(Boolean).join(' ').toLowerCase().includes(q.toLowerCase()) ? 1 : 0)) : 1;
+            r.__searchScore = score;
+            return matchYear && matchStream && matchType && matchTerm && matchUnit && matchCorrection && score > 0;
         });
 
+        if (q) filtered.sort((a,b)=>(b.__searchScore||0)-(a.__searchScore||0));
         render(filtered);
         updateStats(filtered);
     }
@@ -252,5 +256,10 @@
         }, { once: true });
     }
 })();
-// PWA bootstrap
-(() => { const s=document.createElement('script'); s.src=base + 'assets/js/pwa.js'; s.defer=true; document.head.appendChild(s); })();
+// Shared PWA and user features
+(() => {
+    for (const src of ['/prof-manel.snv/assets/js/pwa.js','/prof-manel.snv/assets/js/user-features.js']) {
+        if (document.querySelector('script[src="'+src+'"]')) continue;
+        const s=document.createElement('script'); s.src=src; s.defer=true; document.head.appendChild(s);
+    }
+})();
