@@ -13,7 +13,7 @@
         gtmSrc: 'https://www.googletagmanager.com/gtm.js',
         adsenseSrc: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
         adSelector: 'ins.adsbygoogle',
-        adRootMargin: '360px 0px',
+        adRootMargin: '180px 0px',
         adStatusCheckDelay: 250,
         adStatusCheckLimit: 48
     });
