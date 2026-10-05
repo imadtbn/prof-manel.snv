@@ -2565,3 +2565,5 @@ footer {
         font-size: 11px;
     }
 }
+
+.year-card, .year-card:visited { text-decoration:none; color:inherit; }
