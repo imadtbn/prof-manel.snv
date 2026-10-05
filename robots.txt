@@ -1,11 +1,12 @@
 User-agent: *
 Allow: /
 
-# Keep transient search and pagination query states out of the crawl.
+# Keep transient search, legacy query routes and offline internals out of the index.
 Disallow: /*?q=
 Disallow: /*?search=
 Disallow: /*?page=
+Disallow: /prof-manel.snv/resources/resource.html
+Disallow: /prof-manel.snv/offline.html
 
 Sitemap: https://imadtbn.github.io/prof-manel.snv/sitemap.xml
-
-# The site has no private administration paths.
+Host: imadtbn.github.io
