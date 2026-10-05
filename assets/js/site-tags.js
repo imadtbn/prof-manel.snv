@@ -7,7 +7,7 @@
 
     const TAG_CONFIG = Object.freeze({
         gtmId: 'GTM-N32B2XGG',
-        ga4Id: 'G-BT30MKHK77',
+        ga4Id: 'G-TTBZP0KPQF',
         ga4Mode: 'gtm',
         adsenseClient: 'ca-pub-5656416032906373',
         gtmSrc: 'https://www.googletagmanager.com/gtm.js',
@@ -21,7 +21,6 @@
     const mountedAds = new WeakSet();
     const scriptLoads = new Map();
     let adObserver;
-    let mutationObserver;
     let refreshScheduled = false;
     let gtmEventPushed = false;
     let ga4DataLayerPushed = false;
@@ -209,10 +208,6 @@
         initMeasurement();
         scheduleAdRefresh();
 
-        if ('MutationObserver' in window && document.body) {
-            mutationObserver = new MutationObserver(scheduleAdRefresh);
-            mutationObserver.observe(document.body, { childList: true, subtree: true });
-        }
     }
 
     window.SiteTags = Object.freeze({
