@@ -138,6 +138,37 @@
         if (streams.includes(current)) select.value = current;
     }
 
+    function injectCatalogStructuredData(scoped) {
+        const canonical = document.querySelector('link[rel="canonical"]')?.href || location.href;
+        const isYear = Boolean(fixedYear);
+        const breadcrumb = {
+            '@context':'https://schema.org',
+            '@type':'BreadcrumbList',
+            itemListElement:[
+                {'@type':'ListItem',position:1,name:'الرئيسية',item:'https://imadtbn.github.io/prof-manel.snv/'},
+                {'@type':'ListItem',position:2,name:isYear ? 'الموارد التعليمية' : 'كل الموارد',item:isYear ? 'https://imadtbn.github.io/prof-manel.snv/resources/' : canonical}
+            ]
+        };
+        const itemList = {
+            '@context':'https://schema.org',
+            '@type':'ItemList',
+            name: document.title,
+            numberOfItems: scoped.length,
+            itemListElement: scoped.map((r,i)=>({
+                '@type':'ListItem',
+                position:i+1,
+                url:new URL(base + r.permalink, location.href).href,
+                name:r.title
+            }))
+        };
+        [breadcrumb,itemList].forEach(data=>{
+            const node=document.createElement('script');
+            node.type='application/ld+json';
+            node.textContent=JSON.stringify(data);
+            document.head.appendChild(node);
+        });
+    }
+
     async function initCatalog() {
         initTheme();
 
@@ -155,6 +186,12 @@
             const grid = $('catalogGrid');
             if (grid) grid.innerHTML = '<div class="catalog-empty"><i class="fas fa-triangle-exclamation"></i><strong>تعذر تحميل قاعدة الموارد</strong><p>أعد المحاولة لاحقًا.</p></div>';
         }
+
+        const initialQuery = new URLSearchParams(location.search).get('q');
+        if (initialQuery && $('catalogSearch')) $('catalogSearch').value = initialQuery;
+        filter();
+
+        injectCatalogStructuredData(scoped);
 
         $('catalogSearch')?.addEventListener('input', filter);
         $('streamFilter')?.addEventListener('change', filter);
@@ -194,3 +231,5 @@
         document.addEventListener('DOMContentLoaded', initTheme, { once: true });
     }
 })();
+// PWA bootstrap
+(() => { const s=document.createElement('script'); s.src=base + 'assets/js/pwa.js'; s.defer=true; document.head.appendChild(s); })();
