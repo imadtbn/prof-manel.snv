@@ -1,20 +1,53 @@
 {
+  "id": "/prof-manel.snv/",
   "name": "علوم الطبيعة | الأستاذة بوسنة منال",
   "short_name": "علوم الطبيعة",
   "description": "منصة تعليمية جزائرية لنماذج فروض واختبارات ودروس وتمارين علوم الطبيعة للثانوي.",
   "lang": "ar-DZ",
   "dir": "rtl",
-  "start_url": "/prof-manel.snv/",
+  "start_url": "/prof-manel.snv/?source=pwa",
   "scope": "/prof-manel.snv/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
+  "categories": ["education", "productivity"],
   "icons": [
     {
       "src": "/prof-manel.snv/assets/img/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/prof-manel.snv/assets/img/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "كل الموارد",
+      "short_name": "الموارد",
+      "url": "/prof-manel.snv/resources/",
+      "icons": [{"src":"/prof-manel.snv/assets/img/favicon.svg","sizes":"any","type":"image/svg+xml"}]
+    },
+    {
+      "name": "السنة الأولى",
+      "short_name": "1AS",
+      "url": "/prof-manel.snv/years/first-year.html"
+    },
+    {
+      "name": "السنة الثانية",
+      "short_name": "2AS",
+      "url": "/prof-manel.snv/years/second-year.html"
+    },
+    {
+      "name": "السنة الثالثة",
+      "short_name": "3AS",
+      "url": "/prof-manel.snv/years/third-year.html"
     }
   ]
 }
