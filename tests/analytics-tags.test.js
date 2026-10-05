@@ -34,17 +34,11 @@ test('centralizes GTM and GA4 without a direct gtag config', () => {
     assert.match(siteTags, /if \(isConfigured\(TAG_CONFIG\.gtmId\)\) return initGtm\(\)/);
 });
 
-test('keeps the supplied AdSense slots unique and complete', () => {
-    assert.deepEqual([...new Set(allSlots)].sort(), [
-        '1760836049',
-        '3143411927',
-        '6152718642',
-        '6528123169',
-        '7867079394',
-        '8546947691'
-    ]);
-    assert.equal(allSlots.length, new Set(allSlots).size);
+test('uses exactly one lazy AdSense slot per page', () => {
+    assert.deepEqual(allSlots, ['3143411927']);
+    assert.equal(inlineSlots.length, 0);
     assert.match(siteTags, /adsbygoogle\.js/);
+    assert.match(siteTags, /IntersectionObserver/);
 });
 
 test('loads no legacy direct measurement tags', () => {
