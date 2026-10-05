@@ -2573,3 +2573,27 @@ footer {
         display: flex;
     }
 }
+
+.pwa-install-btn {
+    position: fixed;
+    left: 18px;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    z-index: 1800;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 11px 16px;
+    border: 1px solid rgba(212,175,55,.4);
+    border-radius: 999px;
+    background: #d4af37;
+    color: #0a0a0f;
+    font: 700 13px 'Cairo', sans-serif;
+    box-shadow: 0 12px 30px rgba(0,0,0,.24);
+    cursor: pointer;
+}
+.pwa-install-btn[hidden] { display:none !important; }
+@media (max-width:480px) {
+    .pwa-install-btn { left:12px; right:12px; justify-content:center; }
+}
+@media print { .pwa-install-btn { display:none !important; } }
