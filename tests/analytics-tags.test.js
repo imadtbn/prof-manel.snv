@@ -7,46 +7,40 @@ import test from 'node:test';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = file => readFile(resolve(root, file), 'utf8');
 
-const [indexHtml, siteTags, pageScript] = await Promise.all([
-    read('index.html'),
-    read('assets/js/site-tags.js'),
-    read('assets/js/script.js')
-]);
+const representativePages = [
+  'index.html',
+  'resources/index.html',
+  'years/first-year.html',
+  'about.html',
+  'contact.html',
+  'favorites.html',
+  'resources/items/3as-immune-system-bac-exam.html'
+];
 
-const staticSlots = [...indexHtml.matchAll(/data-ad-slot="(\d+)"/g)].map(match => match[1]);
-const inlineSlots = [...pageScript.matchAll(/slot: '(\d+)'/g)].map(match => match[1]);
-const allSlots = [...staticSlots, ...inlineSlots];
-
-test('uses one centralized third-party tags loader', () => {
-    assert.equal((indexHtml.match(/assets\/js\/site-tags\.js/g) || []).length, 1);
-    assert.equal((indexHtml.match(/google-site-verification/g) || []).length, 1);
-    assert.equal((indexHtml.match(/googletagmanager\.com\/ns\.html\?id=/g) || []).length, 1);
-    assert.doesNotMatch(indexHtml, /googletagmanager\.com\/gtag\/js|google-analytics\.com\/analytics\.js/i);
+test('embeds direct GA4 tracking on representative pages', async () => {
+  for (const file of representativePages) {
+    const html = await read(file);
+    assert.match(html, /googletagmanager\.com\/gtag\/js\?id=G-BT30MKHK77/);
+    assert.match(html, /gtag\('config',\s*'G-BT30MKHK77'\)/);
+    assert.doesNotMatch(html, /site-tags\.js|GTM-N32B2XGG|G-TTBZP0KPQF/);
+  }
 });
 
-test('centralizes GTM and GA4 without a direct gtag config', () => {
-    assert.match(siteTags, /gtmId:\s*'GTM-N32B2XGG'/);
-    assert.match(siteTags, /ga4Id:\s*'G-TTBZP0KPQF'/);
-    assert.match(siteTags, /ga4Mode:\s*'gtm'/);
-    assert.match(siteTags, /googletagmanager\.com\/gtm\.js/);
-    assert.match(siteTags, /site_tags_ga4_config/);
-    assert.match(siteTags, /ga4Mode !== 'direct'/);
-    assert.match(siteTags, /if \(isConfigured\(TAG_CONFIG\.gtmId\)\) return initGtm\(\)/);
+test('embeds verification and AdSense directly on representative pages', async () => {
+  for (const file of representativePages) {
+    const html = await read(file);
+    assert.match(html, /google-site-verification/);
+    assert.match(html, /google-adsense-account/);
+    assert.match(html, /pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-5656416032906373/);
+    assert.match(html, /crossorigin="anonymous"/);
+  }
 });
 
-test('uses two centralized lazy AdSense slots per page', () => {
-    assert.deepEqual(allSlots, ['3143411927']);
-    assert.equal(inlineSlots.length, 0);
-    assert.match(siteTags, /3143411927/);
-    assert.match(siteTags, /1760836049/);
-    assert.match(siteTags, /ensureAdSlots/);
-    assert.match(siteTags, /IntersectionObserver/);
-    assert.match(siteTags, /adsbygoogle\.js/);
-    assert.match(siteTags, /crossOrigin = 'anonymous'/);
-    assert.doesNotMatch(siteTags, /collapseUnfilledAd|is-collapsed/);
-});
-
-test('loads no legacy direct measurement tags', () => {
-    assert.doesNotMatch(indexHtml, /google-analytics\.com|clarity\.ms/i);
-    assert.doesNotMatch(pageScript, /googletagmanager\.com|google-analytics\.com|clarity\.ms/i);
+test('uses exactly two direct ad units per representative page', async () => {
+  for (const file of representativePages) {
+    const html = await read(file);
+    const slots = [...html.matchAll(/data-ad-slot="(\d+)"/g)].map(m => m[1]).sort();
+    assert.deepEqual(slots, ['1760836049', '3143411927']);
+    assert.equal((html.match(/adsbygoogle = window\.adsbygoogle/g) || []).length, 2);
+  }
 });
