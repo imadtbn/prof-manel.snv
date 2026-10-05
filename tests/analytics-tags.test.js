@@ -34,13 +34,15 @@ test('centralizes GTM and GA4 without a direct gtag config', () => {
     assert.match(siteTags, /if \(isConfigured\(TAG_CONFIG\.gtmId\)\) return initGtm\(\)/);
 });
 
-test('uses one centralized lazy AdSense slot per page', () => {
+test('uses two centralized lazy AdSense slots per page', () => {
     assert.deepEqual(allSlots, ['3143411927']);
     assert.equal(inlineSlots.length, 0);
-    assert.match(siteTags, /adSlot:\s*'3143411927'/);
-    assert.match(siteTags, /ensureAdSlot/);
+    assert.match(siteTags, /3143411927/);
+    assert.match(siteTags, /1760836049/);
+    assert.match(siteTags, /ensureAdSlots/);
     assert.match(siteTags, /IntersectionObserver/);
     assert.match(siteTags, /adsbygoogle\.js/);
+    assert.match(siteTags, /crossOrigin = 'anonymous'/);
     assert.doesNotMatch(siteTags, /collapseUnfilledAd|is-collapsed/);
 });
 
