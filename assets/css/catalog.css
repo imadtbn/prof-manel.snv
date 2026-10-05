@@ -218,3 +218,25 @@
     .catalog-kpis { grid-template-columns: 1fr; }
     .catalog-filters { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 1024px) {
+    .catalog-page + .catalog-page-footer,
+    .catalog-page {
+        --tablet-nav-ready: 1;
+    }
+
+    #mainHeader .menu-toggle {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    #mainHeader .header-container {
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "brand actions";
+    }
+
+    .catalog-page {
+        padding-top: 72px;
+    }
+}
