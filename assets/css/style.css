@@ -2786,3 +2786,31 @@ footer {
         font-size: 10px;
     }
 }
+
+
+/* Two-ad page distribution */
+.ad-container--site-primary,
+.ad-container--site-secondary {
+    max-width: 1280px;
+    margin-inline: auto;
+}
+
+.ad-container--site-secondary {
+    padding-top: 24px;
+    padding-bottom: 30px;
+}
+
+.ad-container--site .ad-shell {
+    min-height: 100px;
+}
+
+@media (max-width: 768px) {
+    .ad-container--site-secondary {
+        padding-top: 14px;
+        padding-bottom: 20px;
+    }
+
+    .ad-container--site .ad-shell {
+        min-height: 92px;
+    }
+}
