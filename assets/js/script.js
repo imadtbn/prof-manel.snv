@@ -343,11 +343,14 @@ function renderResources(data, page) {
         card.className = 'resource-card';
         card.tabIndex = 0;
         card.setAttribute('aria-label', `${res.title} - سنة ${res.year} - ${res.stream}`);
-        card.onclick = function() { openPreview(res); };
+        card.onclick = function() {
+            if (res.permalink) window.location.href = res.permalink;
+            else openPreview(res);
+        };
         card.onkeydown = function(event) {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                openPreview(res);
+                if (res.permalink) window.location.href = res.permalink; else openPreview(res);
             }
         };
 
@@ -377,8 +380,8 @@ function renderResources(data, page) {
                         <button onclick="event.stopPropagation(); openPreviewById(${res.id})" class="card-btn card-btn-preview" title="معاينة" aria-label="معاينة ${res.title}">
                             <i class="fas fa-eye"></i>
                         </button>
-                        ${res.download
-                            ? `<a href="${res.download}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="card-btn card-btn-download" title="تحميل" aria-label="تحميل ${res.title}"><i class="fas fa-download"></i></a>`
+                        ${res.downloadUrl
+                            ? `<a href="${res.downloadUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="card-btn card-btn-download" title="تحميل" aria-label="تحميل ${res.title}"><i class="fas fa-download"></i></a>`
                             : `<button type="button" class="card-btn card-btn-disabled" disabled title="الملف قيد الإضافة" aria-label="الملف قيد الإضافة"><i class="fas fa-clock"></i></button>`}
                     </div>
                 </div>
@@ -499,8 +502,8 @@ function openPreview(res) {
     if (modalMeta) modalMeta.textContent = `سنة ${res.year} • ${res.stream} • ${res.type} • ${res.pages} صفحة`;
     if (previewDocTitle) previewDocTitle.textContent = res.title;
     if (modalDownload) {
-        if (res.download) {
-            modalDownload.href = res.download;
+        if (res.downloadUrl) {
+            modalDownload.href = res.downloadUrl;
             modalDownload.removeAttribute('aria-disabled');
             modalDownload.classList.remove('is-disabled');
         } else {
@@ -536,7 +539,9 @@ function printResource() {
 
 function shareResource() {
     if (!currentPreviewResource) return;
-    const shareUrl = currentPreviewResource.download || window.location.href;
+    const shareUrl = currentPreviewResource.permalink
+        ? new URL(currentPreviewResource.permalink, window.location.href).href
+        : (currentPreviewResource.downloadUrl || window.location.href);
 
     if (navigator.share) {
         navigator.share({
