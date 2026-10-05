@@ -27,6 +27,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
     <meta name="google-adsense-account" content="ca-pub-5656416032906373">
@@ -114,7 +116,7 @@
     <div id="mobileOverlay" onclick="toggleMobileMenu()"></div>
 
     <!-- Mobile Menu -->
-    <div id="mobileMenu">
+    <div id="mobileMenu" aria-hidden="true">
         <div class="mobile-menu-header">
             <div class="logo-small">
                 <div class="logo-icon">🔬</div>
@@ -197,7 +199,7 @@
                         <span>تسجيل الدخول</span>
                     </a> -->
 
-                    <button onclick="toggleMobileMenu()" class="menu-toggle" aria-label="فتح قائمة التنقل">
+                    <button onclick="toggleMobileMenu()" class="menu-toggle" aria-label="فتح قائمة التنقل" aria-controls="mobileMenu" aria-expanded="false">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
@@ -372,16 +374,6 @@
         </div>
     </section>
 
-    <!-- إعلان fluid بين اختيار السنة وبداية الموارد -->
-    <section class="ad-container ad-container--feed" aria-label="مساحة إعلانية">
-        <div class="ad-shell ad-shell--fluid">
-            <span class="ad-label">إعلان</span>
-            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-format="fluid"
-                data-ad-layout-key="-fr+56+4k-d4+74" data-ad-client="ca-pub-5656416032906373"
-                data-ad-slot="7867079394"></ins>
-        </div>
-    </section>
-
     <!-- Resources Section -->
     <section id="resources" aria-labelledby="resources-title">
         <div class="container">
@@ -455,15 +447,6 @@
 
             <!-- Pagination -->
             <div id="pagination" class="pagination"></div>
-        </div>
-    </section>
-
-    <!-- إعلان متجاوب بعد انتهاء الخلاصة وقبل قسم التعريف -->
-    <section class="ad-container ad-container--section" aria-label="مساحة إعلانية">
-        <div class="ad-shell ad-shell--responsive">
-            <span class="ad-label">إعلان</span>
-            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-client="ca-pub-5656416032906373"
-                data-ad-slot="1760836049" data-ad-format="auto" data-full-width-responsive="true"></ins>
         </div>
     </section>
 
@@ -551,15 +534,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- إعلان Multiplex قرب نهاية المحتوى، بعيد عن التفاعل الأساسي -->
-    <section class="ad-container ad-container--multiplex" aria-label="مساحة إعلانية">
-        <div class="ad-shell ad-shell--multiplex">
-            <span class="ad-label">إعلانات مقترحة</span>
-            <ins class="adsbygoogle ad-unit" style="display:block" data-ad-format="autorelaxed"
-                data-ad-client="ca-pub-5656416032906373" data-ad-slot="6528123169"></ins>
         </div>
     </section>
 
