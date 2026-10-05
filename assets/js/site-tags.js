@@ -13,7 +13,7 @@
         gtmSrc: 'https://www.googletagmanager.com/gtm.js',
         adsenseSrc: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
         adSelector: 'ins.adsbygoogle',
-        adSlot: '3143411927',
+        adSlots: Object.freeze(['3143411927', '1760836049']),
         adRootMargin: '180px 0px'
     });
 
@@ -51,6 +51,7 @@
             const script = document.createElement('script');
             script.async = true;
             script.src = src;
+            if (key === 'adsense') script.crossOrigin = 'anonymous';
             script.addEventListener('load', () => {
                 script.dataset.siteTagsReady = 'true';
                 resolve(true);
@@ -114,32 +115,58 @@
         return initDirectGa4();
     }
 
-    function ensureAdSlot() {
-        const existing = document.querySelector(TAG_CONFIG.adSelector);
-        if (existing) return existing;
-
-        const main = document.querySelector('main');
-        if (!main) return null;
-
+    function createAdContainer(slot, position) {
         const container = document.createElement('section');
-        container.className = 'ad-container ad-container--site';
-        container.setAttribute('aria-label', 'إعلان');
-        container.innerHTML = `
-            <div class="ad-shell ad-shell--responsive">
-                <span class="ad-label">إعلان</span>
-                <ins class="adsbygoogle ad-unit"
-                    style="display:block"
-                    data-ad-client="${TAG_CONFIG.adsenseClient}"
-                    data-ad-slot="${TAG_CONFIG.adSlot}"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-            </div>`;
+        container.className = 'ad-container ad-container--site ad-container--site-' + position;
+        container.setAttribute('aria-label', position === 'primary' ? 'إعلان 1' : 'إعلان 2');
+        container.innerHTML =
+            '<div class="ad-shell ad-shell--responsive">' +
+            '<span class="ad-label">إعلان</span>' +
+            '<ins class="adsbygoogle ad-unit" style="display:block" ' +
+            'data-ad-client="' + TAG_CONFIG.adsenseClient + '" ' +
+            'data-ad-slot="' + slot + '" data-ad-format="auto" ' +
+            'data-full-width-responsive="true"></ins></div>';
+        return container;
+    }
 
-        const firstSection = main.querySelector('section');
-        if (firstSection) firstSection.insertAdjacentElement('afterend', container);
-        else main.prepend(container);
+    function placeAdContainer(main, container, position) {
+        const sections = [...main.children].filter(node =>
+            node.tagName === 'SECTION' && !node.classList.contains('ad-container')
+        );
 
-        return container.querySelector(TAG_CONFIG.adSelector);
+        if (position === 'primary') {
+            const first = sections[0];
+            if (first) first.insertAdjacentElement('afterend', container);
+            else main.prepend(container);
+            return;
+        }
+
+        const resourcesSection = main.querySelector('#resources');
+        if (resourcesSection) {
+            resourcesSection.insertAdjacentElement('afterend', container);
+            return;
+        }
+
+        const last = sections[sections.length - 1];
+        if (last) last.insertAdjacentElement('afterend', container);
+        else main.append(container);
+    }
+
+    function ensureAdSlots() {
+        const main = document.querySelector('main');
+        if (!main) return [];
+
+        return TAG_CONFIG.adSlots.map((slot, index) => {
+            const existing = document.querySelector(
+                TAG_CONFIG.adSelector + '[data-ad-slot="' + slot + '"]'
+            );
+            if (existing) return existing;
+
+            const position = index === 0 ? 'primary' : 'secondary';
+            const container = createAdContainer(slot, position);
+            placeAdContainer(main, container, position);
+            return container.querySelector(TAG_CONFIG.adSelector);
+        }).filter(Boolean);
     }
 
     function getAds() {
@@ -208,13 +235,14 @@
 
     function init() {
         initMeasurement();
-        ensureAdSlot();
+        ensureAdSlots();
         scheduleAdRefresh();
     }
 
     window.SiteTags = Object.freeze({
         config: TAG_CONFIG,
-        refreshAds: scheduleAdRefresh
+        refreshAds: scheduleAdRefresh,
+        ensureAdSlots
     });
 
     if (document.readyState === 'loading') {
