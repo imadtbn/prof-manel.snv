@@ -817,3 +817,5 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('%c🔬 موقع علوم الطبيعة جاهز!', 'color:#d4af37; font-size:14px; font-weight:bold;');
     console.log('%cتم تطويره بواسطة فريق علوم الطبيعة - 2026', 'color:#666; font-size:10px;');
 });
+// PWA bootstrap
+(() => { const s=document.createElement('script'); s.src='assets/js/pwa.js'; s.defer=true; document.head.appendChild(s); })();
