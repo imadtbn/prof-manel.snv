@@ -2567,3 +2567,9 @@ footer {
 }
 
 .year-card, .year-card:visited { text-decoration:none; color:inherit; }
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .menu-toggle {
+        display: flex;
+    }
+}
