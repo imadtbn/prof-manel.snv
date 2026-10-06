@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'snv-pwa-v8-20261006';
+const CACHE_VERSION = 'snv-pwa-v9-20261006';
 const APP_BASE = '/prof-manel.snv/';
 const CORE = [
   APP_BASE,
