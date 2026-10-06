@@ -2845,3 +2845,27 @@ footer {
         display: none !important;
     }
 }
+
+
+/* AdSense blank-frame fix */
+.page-ad .adsbygoogle {
+    opacity: 0;
+    transition: opacity .18s ease;
+}
+
+.page-ad .adsbygoogle[data-ad-status="filled"] {
+    opacity: 1;
+}
+
+.page-ad .adsbygoogle[data-ad-status="unfilled"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+}
+
+.page-ad:has(.adsbygoogle[data-ad-status="unfilled"]) {
+    display: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+}
