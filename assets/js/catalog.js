@@ -149,8 +149,8 @@
             '@context':'https://schema.org',
             '@type':'BreadcrumbList',
             itemListElement:[
-                {'@type':'ListItem',position:1,name:'الرئيسية',item:'https://imadtbn.github.io/prof-manel.snv/'},
-                {'@type':'ListItem',position:2,name:isYear ? 'الموارد التعليمية' : 'كل الموارد',item:isYear ? 'https://imadtbn.github.io/prof-manel.snv/resources/' : canonical}
+                {'@type':'ListItem',position:1,name:'الرئيسية',item:'https://imadtbn.github.io/prof-mnl.snv/'},
+                {'@type':'ListItem',position:2,name:isYear ? 'الموارد التعليمية' : 'كل الموارد',item:isYear ? 'https://imadtbn.github.io/prof-mnl.snv/resources/' : canonical}
             ]
         };
         const itemList = {
@@ -234,8 +234,8 @@
             '@context':'https://schema.org',
             '@type':'BreadcrumbList',
             itemListElement:[
-                {'@type':'ListItem',position:1,name:'الرئيسية',item:'https://imadtbn.github.io/prof-manel.snv/'},
-                {'@type':'ListItem',position:2,name:'الموارد التعليمية',item:'https://imadtbn.github.io/prof-manel.snv/resources/'},
+                {'@type':'ListItem',position:1,name:'الرئيسية',item:'https://imadtbn.github.io/prof-mnl.snv/'},
+                {'@type':'ListItem',position:2,name:'الموارد التعليمية',item:'https://imadtbn.github.io/prof-mnl.snv/resources/'},
                 {'@type':'ListItem',position:3,name:title,item:location.href}
             ]
         };
@@ -258,7 +258,7 @@
 })();
 // Shared PWA and user features
 (() => {
-    for (const src of ['/prof-manel.snv/assets/js/pwa.js','/prof-manel.snv/assets/js/user-features.js']) {
+    for (const src of ['/prof-mnl.snv/assets/js/pwa.js','/prof-mnl.snv/assets/js/user-features.js']) {
         if (document.querySelector('script[src="'+src+'"]')) continue;
         const s=document.createElement('script'); s.src=src; s.defer=true; document.head.appendChild(s);
     }

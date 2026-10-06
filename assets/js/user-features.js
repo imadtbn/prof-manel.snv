@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const ROOT='/prof-manel.snv/';
+const ROOT='/prof-mnl.snv/';
 const KEYS={favorites:'snv-favorites-v1',recent:'snv-recent-v1',stats:'snv-stats-v1'};
 const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??f;}catch(_){return f;}};
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}};

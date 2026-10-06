@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const BASE = '/prof-manel.snv/';
+  const BASE = '/prof-mnl.snv/';
   let deferredPrompt = null;
   let installButton = null;
 
