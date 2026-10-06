@@ -2857,3 +2857,13 @@ footer {
         display: none !important;
     }
 }
+
+/* Hide only AdSense units that Google explicitly marks as unfilled */
+ins.adsbygoogle[data-ad-status="unfilled"] {
+    display: none !important;
+}
+
+/* Remove the wrapper too, so an unfilled ad leaves no blank space */
+.page-ad:has(> ins.adsbygoogle[data-ad-status="unfilled"]) {
+    display: none !important;
+}
