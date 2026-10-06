@@ -2813,57 +2813,42 @@ footer {
 
 
 
-/* Direct AdSense — simple responsive layout */
+/* Direct AdSense — natural responsive rendering */
 .page-ad {
     width: 100%;
     max-width: 1280px;
-    margin: 24px auto;
-    padding: 0 24px;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
+    margin: 22px auto;
+    padding-inline: 24px;
     clear: both;
-    position: relative;
-    z-index: 1;
 }
 
 .page-ad .adsbygoogle {
     display: block;
     width: 100%;
     max-width: 100%;
-    min-height: 90px;
     margin: 0 auto;
-    background: transparent;
 }
 
 .page-ad--primary {
     margin-top: 20px;
-    margin-bottom: 28px;
+    margin-bottom: 26px;
 }
 
 .page-ad--secondary {
-    margin-top: 28px;
-    margin-bottom: 28px;
+    margin-top: 26px;
+    margin-bottom: 26px;
 }
 
 @media (max-width: 768px) {
     .page-ad {
-        margin: 18px auto;
+        margin: 16px auto;
         padding-inline: 14px;
-    }
-
-    .page-ad .adsbygoogle {
-        min-height: 70px;
     }
 }
 
 @media (max-width: 480px) {
     .page-ad {
         padding-inline: 10px;
-    }
-
-    .page-ad .adsbygoogle {
-        min-height: 60px;
     }
 }
 
