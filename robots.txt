@@ -5,8 +5,8 @@ Allow: /
 Disallow: /*?q=
 Disallow: /*?search=
 Disallow: /*?page=
-Disallow: /prof-manel.snv/resources/resource.html
-Disallow: /prof-manel.snv/offline.html
+Disallow: /prof-mnl.snv/resources/resource.html
+Disallow: /prof-mnl.snv/offline.html
 
-Sitemap: https://imadtbn.github.io/prof-manel.snv/sitemap.xml
+Sitemap: https://imadtbn.github.io/prof-mnl.snv/sitemap.xml
 Host: imadtbn.github.io

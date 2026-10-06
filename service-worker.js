@@ -1,5 +1,5 @@
 const CACHE_VERSION = 'snv-pwa-v9-20261006';
-const APP_BASE = '/prof-manel.snv/';
+const APP_BASE = '/prof-mnl.snv/';
 const CORE = [
   APP_BASE,
   APP_BASE + 'index.html',
