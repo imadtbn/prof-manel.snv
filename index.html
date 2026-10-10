@@ -40,6 +40,46 @@
         href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap"
         rel="stylesheet">
 
+    <style>
+        /* Support lessons registration – homepage only */
+        .support-registration { padding: 72px 0; }
+        .support-registration .section-header { margin-bottom: 28px; }
+        .support-registration-card {
+            max-width: 940px; margin: 0 auto; padding: clamp(16px, 3vw, 28px);
+            background: var(--card-bg); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl); box-shadow: var(--shadow-gold);
+            text-align: center; overflow: hidden;
+        }
+        .support-registration-image {
+            display: block; width: 100%; height: auto; max-height: 650px;
+            object-fit: contain; border-radius: var(--radius-md);
+        }
+        .support-registration-action { padding: 24px 8px 8px; }
+        .support-registration-action p { color: var(--text-secondary); margin: 0 0 20px; }
+        .support-registration-button {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 12px; max-width: 100%; padding: 14px 30px;
+            border-radius: var(--radius-sm); background: var(--gold);
+            color: #0a0a0f; font: 700 1rem 'Cairo', sans-serif;
+            text-decoration: none; transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .support-registration-button:hover,
+        .support-registration-button:focus-visible {
+            transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,.22);
+        }
+        .support-registration-button:focus-visible { outline: 3px solid var(--emerald); outline-offset: 3px; }
+        @media (max-width: 600px) {
+            .support-registration { padding: 44px 0; }
+            .support-registration .container { padding-inline: 16px; }
+            .support-registration-card { border-radius: var(--radius-lg); padding: 12px; }
+            .support-registration-action { padding: 18px 4px 4px; }
+            .support-registration-button { width: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .support-registration-button { transition: none; }
+        }
+    </style>
+
     <!-- Styles -->
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -425,6 +465,32 @@
                             <i class="fas fa-arrow-left"></i>
                         </div>
                     </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Lessons Registration Section -->
+        <section id="support-registration" class="support-registration" aria-labelledby="support-registration-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="support-registration-title" class="section-title">التسجيل في دروس الدعم لمادة العلوم الطبيعية</h2>
+                    <p class="section-desc">استمارة التسجيل في دروس الدعم لمادة العلوم الطبيعية</p>
+                </div>
+                <div class="support-registration-card">
+                    <img class="support-registration-image" src="assets/img/Registration-nss.jpg"
+                        alt="إعلان التسجيل في دروس الدعم لمادة العلوم الطبيعية"
+                        loading="lazy" decoding="async">
+                    <div class="support-registration-action">
+                        <p>للتسجيل، يرجى ملء الاستمارة عبر الرابط التالي.</p>
+                        <a class="support-registration-button"
+                            href="https://forms.gle/tPCqqoTHZGthAwQW6"
+                            target="_blank" rel="noopener noreferrer"
+                            aria-label="افتح استمارة التسجيل في دروس الدعم لمادة العلوم الطبيعية في تبويب جديد">
+                            <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+                            <span>سجّل الآن</span>
+                            <i class="fas fa-arrow-up-left-from-square" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
